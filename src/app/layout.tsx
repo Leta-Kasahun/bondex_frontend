@@ -7,6 +7,7 @@ import { Inter, Poppins, Fira_Mono } from "next/font/google";
 
 // Shadcn providers
 import { TooltipProvider } from "../componenets/ui/tooltip";
+import { AuthProvider, QueryProvider } from "../providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -52,7 +53,11 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className="min-h-full flex flex-col">
-        <TooltipProvider>{children}</TooltipProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );
