@@ -4,10 +4,9 @@ import "./globals.css";
 
 // Fonts
 import { Inter, Poppins, Fira_Mono } from "next/font/google";
-import { Noto_Sans_Ethiopic } from "next/font/google";
 
-// Shadcn@ providers
-import { TooltipProvider } from "@/components/ui/tooltip";
+// Shadcn providers
+import { TooltipProvider } from "../componenets/ui/tooltip";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,12 +18,6 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-});
-
-const notoEthiopic = Noto_Sans_Ethiopic({
-  variable: "--font-noto-ethiopic",
-  subsets: ["ethiopic"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const firaMono = Fira_Mono({
@@ -44,10 +37,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${poppins.variable} ${notoEthiopic.variable} ${firaMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${poppins.variable} ${firaMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Load Noto Sans Ethiopic from Google Fonts CDN */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <style>{`
+          :root {
+            --font-noto-ethiopic: 'Noto Sans Ethiopic', system-ui, sans-serif;
+          }
+        `}</style>
+      </head>
       <body className="min-h-full flex flex-col">
-        {/* Wrap Shadcn@ providers */}
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>

@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-poppins);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,72 +49,99 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  /* Bondex Custom Colors - Light Mode */
+  --background: #F3F2F0;
+  --foreground: #1E293B;
+  
+  --card: #FFFFFF;
+  --card-foreground: #1E293B;
+  
+  --popover: #FFFFFF;
+  --popover-foreground: #1E293B;
+  
+  --primary: #2C4E6F;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #5F82AA;
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  
+  --accent: #D5DEE7;
+  --accent-foreground: #2C4E6F;
+  
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  
+  --border: #D1D9E0;
+  --input: #D1D9E0;
+  --ring: #8BAACF;
+  
+  --chart-1: #2C4E6F;
+  --chart-2: #5F82AA;
+  --chart-3: #8BAACF;
+  --chart-4: #D5DEE7;
+  --chart-5: #334155;
+  
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Sidebar Colors - Light Mode */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1E293B;
+  --sidebar-primary: #5F82AA;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #1E293B;
+  --sidebar-border: #C3CDD6;
+  --sidebar-ring: #8BAACF;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Bondex Custom Colors - Dark Mode */
+  --background: #0F172A;
+  --foreground: #E2E8F0;
+  
+  --card: #1E293B;
+  --card-foreground: #E2E8F0;
+  
+  --popover: #1E293B;
+  --popover-foreground: #E2E8F0;
+  
+  --primary: #5F82AA;
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #2C4E6F;
+  --secondary-foreground: #FFFFFF;
+  
+  --muted: #334155;
+  --muted-foreground: #94A3B8;
+  
+  --accent: #2C4E6F;
+  --accent-foreground: #E2E8F0;
+  
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  
+  --border: #334155;
+  --input: #334155;
+  --ring: #8BAACF;
+  
+  --chart-1: #5F82AA;
+  --chart-2: #8BAACF;
+  --chart-3: #2C4E6F;
+  --chart-4: #475569;
+  --chart-5: #94A3B8;
+  
+  /* Sidebar Colors - Dark Mode */
+  --sidebar: #1E293B;
+  --sidebar-foreground: #E2E8F0;
+  --sidebar-primary: #5F82AA;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #E2E8F0;
+  --sidebar-border: #334155;
+  --sidebar-ring: #8BAACF;
 }
 
 @layer base {
@@ -123,8 +150,249 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter), system-ui, sans-serif;
   }
-  html {
-    @apply font-sans;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-poppins), system-ui, sans-serif;
+    font-weight: 600;
+  }
+  /* Amharic text support */
+  [lang="am"] {
+    font-family: var(--font-noto-ethiopic), system-ui, sans-serif;
+  }
+  /* Mono/code text */
+  code, pre, kbd {
+    font-family: var(--font-fira-mono), monospace;
+  }
+}
+
+@layer components {
+  /* Typography Classes */
+  .text-h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #0F172A;
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+  .text-h2 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #0F172A;
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+  .text-h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #475569;
+    font-family: var(--font-poppins), system-ui, sans-serif;
+  }
+  .text-body {
+    font-size: 1rem;
+    color: #1E293B;
+    line-height: 1.5;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  .text-secondary {
+    font-size: 0.875rem;
+    color: #475569;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  .text-muted {
+    font-size: 0.75rem;
+    color: #64748B;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  /* Card Styles */
+  .card {
+    background-color: #FFFFFF;
+    border-radius: 0.75rem;
+    border: 1px solid #D1D9E0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Sidebar Link Styles */
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #1E293B;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .sidebar-link:hover {
+    background-color: #F1F5F9;
+    color: #1E293B;
+  }
+  
+  .sidebar-link.active {
+    background-color: #5F82AA;
+    color: #FFFFFF;
+    position: relative;
+  }
+  
+  .sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.25rem;
+    height: 1.5rem;
+    background-color: #5F82AA;
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  
+  .sidebar-link .icon {
+    color: #64748B;
+  }
+  
+  .sidebar-link.active .icon {
+    color: #FFFFFF;
+  }
+  
+  .sidebar-link:hover .icon {
+    color: inherit;
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    background-color: #2C4E6F;
+    color: #FFFFFF;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1e3a52;
+  }
+  
+  .btn-secondary {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D9E0;
+    color: #1E293B;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #F8FAFC;
+  }
+  
+  .btn-error {
+    background-color: #EF4444;
+    color: #FFFFFF;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .btn-error:hover {
+    background-color: #DC2626;
+  }
+
+  /* Input Styles */
+  .input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #D1D9E0;
+    border-radius: 0.5rem;
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #8BAACF;
+    box-shadow: 0 0 0 2px rgba(139, 170, 207, 0.5);
+  }
+  
+  .input:hover {
+    border-color: #B8C5D1;
+  }
+
+  /* Priority Badge Styles */
+  .badge-high {
+    background-color: #2C4E6F;
+    color: #FFFFFF;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .badge-medium {
+    background-color: #D5DEE7;
+    color: #2C4E6F;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .badge-low {
+    background-color: #F3F2F0;
+    color: #5F82AA;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  /* Status Badge Styles - Opacity Hierarchy */
+  .badge-new {
+    background-color: #EFF6FF;
+    color: #2C4E6F;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .badge-contacted {
+    background-color: #F1F5F9;
+    color: #64748B;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  /* Converted - Brand Blue at 10% opacity (Clean celebration) */
+  .badge-converted {
+    background-color: rgba(44, 78, 111, 0.1);
+    color: #2C4E6F;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .badge-ignored {
+    background-color: #F1F5F9;
+    color: #94A3B8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: var(--font-inter), system-ui, sans-serif;
   }
 }
