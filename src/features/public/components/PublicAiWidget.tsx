@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Bot, ChevronDown, ChevronUp, Gem, Minimize2, SendHorizontal, Sparkles, X } from "lucide-react";
+import { ChevronDown, ChevronUp, SendHorizontal, Sparkles, X } from "lucide-react";
 import { requestPublicAiMessage } from "../services";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
@@ -21,13 +21,6 @@ const welcomeMessage: ChatMessage = {
   sender: "bot",
   text: "Hi, I am Bondex Bot. Ask me about Bondex overview, features, pricing value, or how it works.",
 };
-
-const iconPrompts = [
-  { prompt: "Bondex overview", top: "top-0", right: "right-2", delay: "0ms" },
-  { prompt: "Features summary", top: "top-4", right: "right-12", delay: "120ms" },
-  { prompt: "How it works", top: "top-1", right: "right-22", delay: "240ms" },
-  { prompt: "Value proposition", top: "top-5", right: "right-32", delay: "360ms" },
-];
 
 export function PublicAiWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +72,7 @@ export function PublicAiWidget() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-4 right-4 z-70">
+    <div className="pointer-events-none fixed bottom-8 right-4 z-70">
       {isOpen ? (
         <Card
           className={cn(
@@ -88,17 +81,17 @@ export function PublicAiWidget() {
           )}
         >
           <CardHeader className="border-b border-border/70 pb-3">
-            <div className="flex items-center justify-between gap-2">
-              <CardTitle className="inline-flex items-center gap-2 text-base">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-primary">
-                  <Bot className="h-4 w-4" aria-hidden />
+            <div className="relative flex items-center justify-center gap-2">
+              <CardTitle className="inline-flex -ml-1 items-center gap-2 text-base font-semibold text-blue-600">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white">
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
                 </span>
-                Bondex Bot
-                <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-blue-600">
-                  <Gem className="h-3.5 w-3.5" aria-hidden />
+                Bondex Assistance AI
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white">
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
                 </span>
               </CardTitle>
-              <div className="flex items-center gap-1">
+              <div className="absolute right-0 flex items-center gap-1">
                 <Button
                   type="button"
                   variant="ghost"
@@ -124,28 +117,6 @@ export function PublicAiWidget() {
           </CardHeader>
 
           <CardContent className="flex h-[calc(100%-4.5rem)] flex-col gap-3 p-3">
-            <div className="relative h-10">
-              {iconPrompts.map((item) => (
-                <button
-                  key={item.prompt}
-                  type="button"
-                  onClick={() => void sendPrompt(item.prompt)}
-                  title={item.prompt}
-                  aria-label={item.prompt}
-                  className={cn(
-                    "absolute inline-flex h-7 w-7 items-center justify-center rounded-full border border-blue-400/35 bg-blue-500/10 text-blue-600 shadow-sm backdrop-blur-sm",
-                    "transition-transform hover:scale-105",
-                    "animate-pulse",
-                    item.top,
-                    item.right
-                  )}
-                  style={{ animationDelay: item.delay }}
-                >
-                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
-                </button>
-              ))}
-            </div>
-
             <div
               ref={listRef}
               className="flex-1 space-y-2 overflow-y-auto rounded-lg border border-border/70 bg-background/65 p-2"
@@ -200,11 +171,17 @@ export function PublicAiWidget() {
       <Button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="pointer-events-auto mt-3 inline-flex h-12 items-center gap-2 rounded-full border border-primary/20 bg-primary px-4 text-primary-foreground shadow-card-hover"
+        className="pointer-events-auto mt-3 inline-flex h-14 w-14 items-center justify-center rounded-full border border-blue-400/40 bg-blue-500 text-white shadow-card-hover"
         aria-label="Open Bondex AI assistant"
       >
-        {isOpen ? <Minimize2 className="h-4 w-4" aria-hidden /> : <Gem className="h-4 w-4" aria-hidden />}
-        Bondex Bot
+        <span className="relative inline-flex h-8 w-8 items-center justify-center">
+          <span className="absolute inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white">
+            <Sparkles className="h-5 w-5" aria-hidden />
+          </span>
+          <span className="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-400 text-white">
+            <Sparkles className="h-2.5 w-2.5" aria-hidden />
+          </span>
+        </span>
       </Button>
     </div>
   );
