@@ -396,3 +396,18 @@
     font-family: var(--font-inter), system-ui, sans-serif;
   }
 }
+
+/* Home page surface override: keep structure/text unchanged, force card-like backgrounds to pure white. */
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-card\/70,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-card\/75,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-card\/80,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/45,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/70,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/75,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/80,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/85,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-white\/90,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-background\/65,
+.min-h-screen.scroll-smooth.bg-background.text-foreground .bg-background\/90 {
+  background-color: #FFFFFF !important;
+}
