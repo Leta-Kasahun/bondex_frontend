@@ -6,7 +6,7 @@ import "./globals.css";
 import { Inter, Poppins, Fira_Mono } from "next/font/google";
 
 // Shadcn providers
-import { TooltipProvider } from "../componenets/ui/tooltip";
+import { TooltipProvider } from "../components/ui/tooltip";
 import { AuthProvider, QueryProvider } from "../providers";
 
 const inter = Inter({
@@ -55,7 +55,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <QueryProvider>
           <AuthProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

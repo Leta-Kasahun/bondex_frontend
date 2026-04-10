@@ -15,3 +15,11 @@ export type PublicContactInput = {
 export type MessageResponse = {
 	message: string;
 };
+
+export type PublicAiResponse = {
+	success: boolean;
+	message?: string;
+	data?: {
+		output?: string;
+	};
+};

@@ -30,14 +30,14 @@ export const useFeatureMutation = <TData, TVariables>(
 	return useMutation({
 		mutationFn,
 		...options,
-		onSuccess: async (data, variables, context) => {
+		onSuccess: async (data, variables, onMutateResult, context) => {
 			if (options?.invalidateKeys?.length) {
 				await Promise.all(
 					options.invalidateKeys.map((key) => queryClient.invalidateQueries({ queryKey: key }))
 				);
 			}
 
-			await options?.onSuccess?.(data, variables, context);
+			await options?.onSuccess?.(data, variables, onMutateResult, context);
 		},
 	});
 };
