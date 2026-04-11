@@ -37,15 +37,15 @@ export const useAdminSystemStats = () =>
 
 export const useBlockAdminUser = () =>
 	useFeatureMutation((userId: string) => blockAdminUser(userId), {
-		invalidateKeys: [ADMIN_USERS_KEY],
+		invalidateKeys: [ADMIN_USERS_KEY, ADMIN_STATS_KEY],
 	});
 
 export const useUnblockAdminUser = () =>
 	useFeatureMutation((userId: string) => unblockAdminUser(userId), {
-		invalidateKeys: [ADMIN_USERS_KEY],
+		invalidateKeys: [ADMIN_USERS_KEY, ADMIN_STATS_KEY],
 	});
 
 export const useDeleteAdminUser = () =>
 	useFeatureMutation((userId: string) => deleteAdminUser(userId), {
-		invalidateKeys: [ADMIN_USERS_KEY],
+		invalidateKeys: [ADMIN_USERS_KEY, ADMIN_STATS_KEY],
 	});

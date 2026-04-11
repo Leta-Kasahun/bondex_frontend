@@ -1,17 +1,29 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { APP_ROUTES } from "@/src/constants";
 import { AdminDashboardAiWidget } from "@/src/features/ai";
 import { useUIStore } from "@/src/stores";
 import { cn } from "@/src/utils/cn";
 import { AdminDashboardOverview } from "./AdminDashboardOverview";
 import { AdminDashboardSidebar } from "./AdminDashboardSidebar";
 import { AdminDashboardTopbar } from "./AdminDashboardTopbar";
+import { AdminUserManagementPage } from "./users";
 
 export function AdminDashboardShell() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
   const isSidebarCollapsed = useUIStore((state) => state.isSidebarCollapsed);
   const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed);
+
+  const renderContent = () => {
+    if (pathname.startsWith(APP_ROUTES.DASHBOARD.ADMIN.USERS)) {
+      return <AdminUserManagementPage />;
+    }
+
+    return <AdminDashboardOverview />;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,7 +66,7 @@ export function AdminDashboardShell() {
             isSidebarCollapsed={isSidebarCollapsed}
             onToggleSidebarCollapse={() => setSidebarCollapsed(!isSidebarCollapsed)}
           />
-          <AdminDashboardOverview />
+          {renderContent()}
           <AdminDashboardAiWidget />
         </div>
       </div>

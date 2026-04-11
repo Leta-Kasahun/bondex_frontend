@@ -2,6 +2,7 @@ import { Activity, BadgeCheck, Link2, Users } from "lucide-react";
 import { MessageCircle, Mail, Webhook, PenSquare } from "lucide-react";
 import { DashboardStatCard, SharedSelectField } from "@/src/features/shared";
 import { IntegrationSyncCard } from "./IntegrationSyncCard";
+import { UserDashboardAnalytics } from "./UserDashboardAnalytics";
 
 export function UserDashboardOverview() {
   return (
@@ -63,6 +64,8 @@ export function UserDashboardOverview() {
           />
         </div>
       </section>
+
+      <UserDashboardAnalytics />
     </main>
   );
 }
