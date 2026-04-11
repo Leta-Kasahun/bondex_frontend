@@ -14,9 +14,10 @@ export type TelegramReplyInput = {
 
 export type TelegramThreadMessage = {
 	id: string;
-	text: string;
-	senderName?: string;
-	createdAt?: string;
+	direction: string;
+	message: string;
+	read: boolean;
+	createdAt: string;
 };
 
 export type MessageResponse = {

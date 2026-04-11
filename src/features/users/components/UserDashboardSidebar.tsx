@@ -18,7 +18,7 @@ const navItems = [
   { label: "Businesses", href: APP_ROUTES.DASHBOARD.BUSINESSES, icon: BriefcaseBusiness, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.BUSINESSES) },
   { label: "Leads", href: APP_ROUTES.DASHBOARD.LEADS, icon: Users, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.LEADS) },
   { label: "Deals", href: APP_ROUTES.DASHBOARD.DEALS, icon: BarChart3, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.DEALS) },
-  { label: "Integrations", href: APP_ROUTES.DASHBOARD.SETTINGS.INTEGRATIONS.TELEGRAM, icon: Link2, matcher: (path: string) => path.startsWith("/settings/integrations") },
+  { label: "Integrations", href: APP_ROUTES.DASHBOARD.SETTINGS.INTEGRATIONS.BASE, icon: Link2, matcher: (path: string) => path.startsWith("/settings/integrations") },
   { label: "Notifications", href: APP_ROUTES.DASHBOARD.NOTIFICATIONS, icon: Bell, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.NOTIFICATIONS) },
   { label: "Settings", href: APP_ROUTES.DASHBOARD.SETTINGS.PROFILE, icon: Settings, matcher: (path: string) => path.startsWith("/settings") },
 ];
