@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Activity,
+  Bell,
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
+  Settings,
+  ShieldCheck,
   Users,
   X,
 } from "lucide-react";
@@ -31,6 +35,30 @@ const navItems = [
     href: APP_ROUTES.DASHBOARD.ADMIN.USERS,
     icon: Users,
     matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.USERS),
+  },
+  {
+    label: "System",
+    href: APP_ROUTES.DASHBOARD.ADMIN.SYSTEM,
+    icon: Activity,
+    matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SYSTEM),
+  },
+  {
+    label: "Security",
+    href: APP_ROUTES.DASHBOARD.ADMIN.SECURITY,
+    icon: ShieldCheck,
+    matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SECURITY),
+  },
+  {
+    label: "Notifications",
+    href: APP_ROUTES.DASHBOARD.ADMIN.NOTIFICATIONS,
+    icon: Bell,
+    matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.NOTIFICATIONS),
+  },
+  {
+    label: "Settings",
+    href: APP_ROUTES.DASHBOARD.ADMIN.SETTINGS,
+    icon: Settings,
+    matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SETTINGS),
   },
 ];
 

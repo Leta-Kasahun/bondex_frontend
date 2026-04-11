@@ -27,6 +27,10 @@ export const APP_ROUTES = {
 		ADMIN: {
 			DASHBOARD: "/admin/dashboard",
 			USERS: "/admin/users",
+			SYSTEM: "/admin/system",
+			SECURITY: "/admin/security",
+			NOTIFICATIONS: "/admin/notifications",
+			SETTINGS: "/admin/settings",
 		},
 		ADMIN_DASHBOARD: "/admin/dashboard",
 	},
