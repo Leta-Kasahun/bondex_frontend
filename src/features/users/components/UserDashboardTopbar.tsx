@@ -1,14 +1,14 @@
 "use client";
 
-import { Bell, ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/src/constants";
 import { Input } from "@/src/components/ui/input";
-import { SharedIconAction } from "@/src/features/shared";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useUserAuth } from "@/src/features/auths/user";
 import { AuthenticatedAvatarMenu } from "@/src/features/shared";
 import { useUserProfile } from "@/src/features/users";
+import { NotificationCenterModal } from "@/src/features/notification";
 
 type UserDashboardTopbarProps = {
   onToggleSidebar: () => void;
@@ -49,7 +49,7 @@ export function UserDashboardTopbar({ onToggleSidebar, isSidebarCollapsed, onTog
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <SharedIconAction icon={Bell} label="Notifications" />
+          <NotificationCenterModal />
           <AuthenticatedAvatarMenu
             role="USER"
             onLogout={() =>

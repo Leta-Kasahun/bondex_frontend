@@ -1,13 +1,13 @@
 "use client";
 
-import { Bell, ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/src/constants";
 import { Input } from "@/src/components/ui/input";
-import { SharedIconAction } from "@/src/features/shared";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useAdminAuth } from "@/src/features/auths/admin";
 import { AuthenticatedAvatarMenu } from "@/src/features/shared";
+import { NotificationCenterModal } from "@/src/features/notification";
 
 type AdminDashboardTopbarProps = {
   onToggleSidebar: () => void;
@@ -51,7 +51,7 @@ export function AdminDashboardTopbar({
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <SharedIconAction icon={Bell} label="Notifications" />
+          <NotificationCenterModal backendEnabled={false} />
           <AuthenticatedAvatarMenu
             role="ADMIN"
             onLogout={() =>
