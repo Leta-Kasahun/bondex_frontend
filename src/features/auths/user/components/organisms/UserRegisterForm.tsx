@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Mail, Lock, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createApiUrl } from "@/src/lib/api/client";
-import { API_ROUTES } from "@/src/config/api";
 import { APP_ROUTES } from "@/src/constants";
 import { AuthGoogleButton } from "../atoms/AuthGoogleButton";
 import { AuthInputField } from "../atoms/AuthInputField";
@@ -13,6 +11,7 @@ import { AuthSubmitButton } from "../atoms/AuthSubmitButton";
 import { AuthErrorText } from "../molecules/AuthErrorText";
 import { AuthFormFrame } from "../molecules/AuthFormFrame";
 import { useUserAuth } from "../../hooks";
+import { getGoogleIdToken } from "../../utils/google-auth.client";
 
 type FormState = {
   name: string;
@@ -28,7 +27,7 @@ const initialState: FormState = {
 
 export function UserRegisterForm() {
   const router = useRouter();
-  const { registerMutation } = useUserAuth();
+  const { registerMutation, signupWithGoogleMutation } = useUserAuth();
   const [form, setForm] = useState<FormState>(initialState);
   const [localError, setLocalError] = useState<string>("");
 
@@ -62,7 +61,23 @@ export function UserRegisterForm() {
   };
 
   const onGoogleSignup = () => {
-    window.location.assign(createApiUrl(API_ROUTES.AUTH.USER.GOOGLE_LOGIN));
+    setLocalError("");
+
+    getGoogleIdToken()
+      .then((idToken) => {
+        signupWithGoogleMutation.mutate(
+          { idToken },
+          {
+            onSuccess: () => {
+              router.push(APP_ROUTES.DASHBOARD.HOME);
+            },
+          }
+        );
+      })
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : "Unable to sign up with Google.";
+        setLocalError(message);
+      });
   };
 
   return (
@@ -119,6 +134,7 @@ export function UserRegisterForm() {
         </div>
       </div>
 
+      <AuthErrorText message={signupWithGoogleMutation.error?.message || ""} />
       <AuthGoogleButton label="Sign up with Google" onClick={onGoogleSignup} />
     </AuthFormFrame>
   );

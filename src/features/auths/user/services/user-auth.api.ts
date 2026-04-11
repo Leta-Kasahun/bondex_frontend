@@ -1,8 +1,9 @@
 import { API_ROUTES } from "@/src/config/api";
-import { requestPost } from "@/src/features/shared/services";
+import { requestGet, requestPost } from "@/src/features/shared/services";
 import {
 	type ForgotPasswordInput,
 	type GoogleAuthInput,
+	type GoogleClientConfig,
 	type LoginUserInput,
 	type MessageResponse,
 	type ResetPasswordInput,
@@ -14,6 +15,9 @@ import {
 
 export const registerUser = (payload: RegisterUserInput) =>
 	requestPost<MessageResponse, RegisterUserInput>(API_ROUTES.AUTH.USER.REGISTER, payload);
+
+export const getGoogleClientConfig = () =>
+	requestGet<GoogleClientConfig>(API_ROUTES.AUTH.USER.GOOGLE_CLIENT_CONFIG);
 
 export const verifyUserRegistrationOtp = (payload: VerifyUserRegistrationOtpInput) =>
 	requestPost<UserAuthSession, VerifyUserRegistrationOtpInput>(

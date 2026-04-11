@@ -7,7 +7,8 @@ export const APP_ROUTES = {
 		RESET_PASSWORD: "/reset-password",
 	},
 	DASHBOARD: {
-		HOME: "/dashboard",
+		HOME: "/users",
+		USERS: "/users",
 		LEADS: "/leads",
 		LEAD_DETAIL: (id: string) => `/leads/${id}`,
 		DEALS: "/deals",

@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createApiUrl } from "@/src/lib/api/client";
-import { API_ROUTES } from "@/src/config/api";
 import { APP_ROUTES } from "@/src/constants";
 import { AuthGoogleButton } from "../atoms/AuthGoogleButton";
 import { AuthInputField } from "../atoms/AuthInputField";
@@ -13,6 +11,7 @@ import { AuthSubmitButton } from "../atoms/AuthSubmitButton";
 import { AuthErrorText } from "../molecules/AuthErrorText";
 import { AuthFormFrame } from "../molecules/AuthFormFrame";
 import { useUserAuth } from "../../hooks";
+import { getGoogleIdToken } from "../../utils/google-auth.client";
 
 type FormState = {
   email: string;
@@ -26,8 +25,9 @@ const initialState: FormState = {
 
 export function UserLoginForm() {
   const router = useRouter();
-  const { loginMutation } = useUserAuth();
+  const { loginMutation, googleLoginMutation } = useUserAuth();
   const [form, setForm] = useState<FormState>(initialState);
+  const [googleError, setGoogleError] = useState<string>("");
 
   const mutationError = useMemo(() => {
     if (!loginMutation.error) return "";
@@ -44,14 +44,30 @@ export function UserLoginForm() {
       },
       {
         onSuccess: () => {
-          router.push(APP_ROUTES.DASHBOARD.HOME);
+          router.push(APP_ROUTES.DASHBOARD.USERS);
         },
       }
     );
   };
 
   const onGoogleLogin = () => {
-    window.location.assign(createApiUrl(API_ROUTES.AUTH.USER.GOOGLE_LOGIN));
+    setGoogleError("");
+
+    getGoogleIdToken()
+      .then((idToken) => {
+        googleLoginMutation.mutate(
+          { idToken },
+          {
+            onSuccess: () => {
+              router.push(APP_ROUTES.DASHBOARD.USERS);
+            },
+          }
+        );
+      })
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : "Unable to sign in with Google.";
+        setGoogleError(message);
+      });
   };
 
   return (
@@ -105,6 +121,7 @@ export function UserLoginForm() {
         </div>
       </div>
 
+      <AuthErrorText message={googleError || googleLoginMutation.error?.message || ""} />
       <AuthGoogleButton label="Continue with Google" onClick={onGoogleLogin} />
     </AuthFormFrame>
   );
