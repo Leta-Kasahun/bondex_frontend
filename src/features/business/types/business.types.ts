@@ -1,13 +1,29 @@
 import { type BaseEntity } from "@/src/types";
 
 export type Business = BaseEntity & {
-	name?: string;
+	name: string;
+	type?: string | null;
 	description?: string | null;
-	industry?: string | null;
-	website?: string | null;
+	logo?: string | null;
 	ownerId?: string;
 };
 
-export type CreateBusinessInput = Record<string, unknown>;
-export type UpdateBusinessInput = Record<string, unknown>;
-export type BusinessListQuery = Record<string, unknown>;
+export type CreateBusinessInput = {
+	name: string;
+	type?: string;
+	description?: string;
+	logo?: string;
+};
+
+export type UpdateBusinessInput = {
+	name?: string;
+	type?: string;
+	description?: string;
+	logo?: string;
+};
+
+export type BusinessListQuery = {
+	page?: number;
+	limit?: number;
+	search?: string;
+};

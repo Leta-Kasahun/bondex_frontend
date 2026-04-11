@@ -9,6 +9,7 @@ import { useUserAuth } from "@/src/features/auths/user";
 import { AuthenticatedAvatarMenu } from "@/src/features/shared";
 import { useUserProfile } from "@/src/features/users";
 import { NotificationCenterModal } from "@/src/features/notification";
+import { BusinessFormModal } from "@/src/features/business";
 
 type UserDashboardTopbarProps = {
   onToggleSidebar: () => void;
@@ -49,6 +50,7 @@ export function UserDashboardTopbar({ onToggleSidebar, isSidebarCollapsed, onTog
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <BusinessFormModal mode="create" triggerLabel="Create business" triggerVariant="outline" />
           <NotificationCenterModal />
           <AuthenticatedAvatarMenu
             role="USER"

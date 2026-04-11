@@ -9,7 +9,7 @@ const isPath = (pathname: string, route: string): boolean =>
 
 const PUBLIC_ROUTES = ["/", "/ai", "/public", "/business"];
 const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/admin/login"];
-const USER_ROUTES = ["/dashboard", "/users", "/leads", "/deals", "/notifications", "/settings"];
+const USER_ROUTES = ["/dashboard", "/users", "/businesses", "/leads", "/deals", "/notifications", "/settings"];
 const ADMIN_ROUTES = ["/admin/dashboard"];
 
 export function middleware(request: NextRequest) {
@@ -60,8 +60,12 @@ export function middleware(request: NextRequest) {
 	}
 
 	if (USER_ROUTES.some((route) => isPath(pathname, route))) {
-		if (hasUserSession || hasAdminSession) {
+		if (hasUserSession) {
 			return NextResponse.next();
+		}
+
+		if (hasAdminSession) {
+			return NextResponse.redirect(new URL("/admin/dashboard", request.url));
 		}
 
 		return NextResponse.redirect(new URL("/login", request.url));

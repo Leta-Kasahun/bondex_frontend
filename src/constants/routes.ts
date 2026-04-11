@@ -9,6 +9,7 @@ export const APP_ROUTES = {
 	DASHBOARD: {
 		HOME: "/users",
 		USERS: "/users",
+		BUSINESSES: "/businesses",
 		LEADS: "/leads",
 		LEAD_DETAIL: (id: string) => `/leads/${id}`,
 		DEALS: "/deals",
