@@ -18,10 +18,11 @@ import {
 
 const BUSINESS_LIST_KEY = buildFeatureKey("business", "list");
 
-export const useBusinesses = (params?: BusinessListQuery) =>
+export const useBusinesses = (params?: BusinessListQuery, enabled = true) =>
 	useFeatureQuery({
 		queryKey: [...BUSINESS_LIST_KEY, JSON.stringify(params ?? {})],
 		queryFn: () => listBusinesses(params),
+		enabled,
 	});
 
 export const useBusiness = (businessId?: string) =>
