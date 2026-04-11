@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BarChart3, Bell, BriefcaseBusiness, ChevronLeft, ChevronRight, LayoutDashboard, Link2, Settings, Users, X } from "lucide-react";
 import { APP_ROUTES } from "@/src/constants";
 import { Button } from "@/src/components/ui/button";
@@ -11,16 +14,18 @@ type UserDashboardSidebarProps = {
 };
 
 const navItems = [
-  { label: "Dashboard", href: APP_ROUTES.DASHBOARD.USERS, icon: LayoutDashboard, active: true },
-  { label: "Businesses", href: APP_ROUTES.DASHBOARD.BUSINESSES, icon: BriefcaseBusiness },
-  { label: "Leads", href: APP_ROUTES.DASHBOARD.LEADS, icon: Users },
-  { label: "Deals", href: APP_ROUTES.DASHBOARD.DEALS, icon: BarChart3 },
-  { label: "Integrations", href: APP_ROUTES.DASHBOARD.SETTINGS.INTEGRATIONS.TELEGRAM, icon: Link2 },
-  { label: "Notifications", href: APP_ROUTES.DASHBOARD.NOTIFICATIONS, icon: Bell },
-  { label: "Settings", href: APP_ROUTES.DASHBOARD.SETTINGS.PROFILE, icon: Settings },
+  { label: "Dashboard", href: APP_ROUTES.DASHBOARD.USERS, icon: LayoutDashboard, matcher: (path: string) => path === APP_ROUTES.DASHBOARD.USERS },
+  { label: "Businesses", href: APP_ROUTES.DASHBOARD.BUSINESSES, icon: BriefcaseBusiness, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.BUSINESSES) },
+  { label: "Leads", href: APP_ROUTES.DASHBOARD.LEADS, icon: Users, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.LEADS) },
+  { label: "Deals", href: APP_ROUTES.DASHBOARD.DEALS, icon: BarChart3, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.DEALS) },
+  { label: "Integrations", href: APP_ROUTES.DASHBOARD.SETTINGS.INTEGRATIONS.TELEGRAM, icon: Link2, matcher: (path: string) => path.startsWith("/settings/integrations") },
+  { label: "Notifications", href: APP_ROUTES.DASHBOARD.NOTIFICATIONS, icon: Bell, matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.NOTIFICATIONS) },
+  { label: "Settings", href: APP_ROUTES.DASHBOARD.SETTINGS.PROFILE, icon: Settings, matcher: (path: string) => path.startsWith("/settings") },
 ];
 
 export function UserDashboardSidebar({ onClose, isCollapsed = false, onToggleCollapse }: UserDashboardSidebarProps) {
+  const pathname = usePathname();
+
   return (
     <aside className={cn("h-full border-r border-sidebar-border bg-sidebar p-4", isCollapsed ? "w-20" : "w-72")}>
       <div className="mb-6 flex items-center justify-between">
@@ -50,7 +55,7 @@ export function UserDashboardSidebar({ onClose, isCollapsed = false, onToggleCol
             key={item.label}
             href={item.href}
             onClick={onClose}
-            className={cn(item.active ? "sidebar-link active" : "sidebar-link", isCollapsed ? "justify-center px-2" : "")}
+            className={cn(item.matcher(pathname) ? "sidebar-link active" : "sidebar-link", isCollapsed ? "justify-center px-2" : "")}
           >
             <item.icon className="icon h-4 w-4" aria-hidden />
             {!isCollapsed ? <span>{item.label}</span> : null}

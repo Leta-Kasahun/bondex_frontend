@@ -22,10 +22,11 @@ import {
 
 const LEAD_LIST_KEY = buildFeatureKey("leads", "list");
 
-export const useLeads = (params?: LeadListQuery) =>
+export const useLeads = (params?: LeadListQuery, enabled = true) =>
 	useFeatureQuery({
 		queryKey: [...LEAD_LIST_KEY, JSON.stringify(params ?? {})],
 		queryFn: () => listLeads(params),
+		enabled,
 	});
 
 export const useLead = (leadId?: string) =>

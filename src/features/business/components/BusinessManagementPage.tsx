@@ -5,12 +5,15 @@ import { Building2, PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { useNotification } from "@/src/hooks";
+import { useAuth } from "@/src/hooks/useAuth";
 import { useBusinesses, useDeleteBusiness } from "../hooks";
 import { BusinessFormModal } from "./BusinessFormModal";
 
 export function BusinessManagementPage() {
   const notification = useNotification();
-  const { data: businesses, isLoading, isError } = useBusinesses();
+  const { isAuthenticated, isUser, accessToken } = useAuth();
+  const canLoadBusinesses = isUser && (isAuthenticated || Boolean(accessToken));
+  const { data: businesses, isLoading, isFetching, isError } = useBusinesses(undefined, canLoadBusinesses);
   const deleteMutation = useDeleteBusiness();
 
   const list = useMemo(() => businesses ?? [], [businesses]);
@@ -33,19 +36,25 @@ export function BusinessManagementPage() {
         <BusinessFormModal mode="create" triggerLabel="Create business" />
       </section>
 
-      {isLoading ? (
+      {canLoadBusinesses && (isLoading || isFetching) ? (
         <Card className="border-border/70 bg-[#FFFFFF]">
           <CardContent className="pt-4 text-sm text-muted-foreground">Loading businesses...</CardContent>
         </Card>
       ) : null}
 
-      {isError ? (
+      {!canLoadBusinesses ? (
+        <Card className="border-border/70 bg-[#FFFFFF]">
+          <CardContent className="pt-4 text-sm text-muted-foreground">Session not ready. Please log in again.</CardContent>
+        </Card>
+      ) : null}
+
+      {canLoadBusinesses && isError ? (
         <Card className="border-border/70 bg-[#FFFFFF]">
           <CardContent className="pt-4 text-sm text-muted-foreground">Unable to load businesses right now.</CardContent>
         </Card>
       ) : null}
 
-      {!isLoading && !isError && list.length === 0 ? (
+      {canLoadBusinesses && !isLoading && !isError && list.length === 0 ? (
         <Card className="border-border/70 bg-[#FFFFFF]">
           <CardHeader>
             <CardTitle className="inline-flex items-center gap-2">
@@ -57,7 +66,7 @@ export function BusinessManagementPage() {
         </Card>
       ) : null}
 
-      {!isLoading && !isError && list.length > 0 ? (
+      {canLoadBusinesses && !isLoading && !isError && list.length > 0 ? (
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {list.map((business) => (
             <Card key={business.id} className="border-border/70 bg-[#FFFFFF]">
