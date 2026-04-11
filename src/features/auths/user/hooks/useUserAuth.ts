@@ -41,7 +41,12 @@ export const useUserAuth = () => {
 	);
 
 	const signupWithGoogleMutation = useFeatureMutation((payload: GoogleAuthInput) =>
-		signupUserWithGoogle(payload)
+		signupUserWithGoogle(payload),
+		{
+			onSuccess: (session) => {
+				setAuth(session.accessToken, "USER");
+			},
+		}
 	);
 
 	const loginMutation = useFeatureMutation((payload: LoginUserInput) => {

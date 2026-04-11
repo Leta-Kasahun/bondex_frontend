@@ -13,6 +13,10 @@ export type GoogleAuthInput = {
 	idToken: string;
 };
 
+export type GoogleClientConfig = {
+	clientId: string;
+};
+
 export type LoginUserInput = {
 	email: string;
 	password: string;

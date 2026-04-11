@@ -2,6 +2,7 @@ export const API_ROUTES = {
 	AUTH: {
 		USER: {
 			BASE: "/auth/user",
+			GOOGLE_CLIENT_CONFIG: "/auth/user/google/client-config",
 			REGISTER: "/auth/user/register",
 			REGISTER_VERIFY_OTP: "/auth/user/register/verify-otp",
 			GOOGLE_SIGNUP: "/auth/user/register/google-signup",
