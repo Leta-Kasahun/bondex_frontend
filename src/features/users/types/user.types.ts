@@ -2,12 +2,14 @@ export type UserProfile = {
 	id: string;
 	name: string;
 	email: string;
+	isActive?: boolean;
+	createdAt?: string;
+	updatedAt?: string;
 	avatar?: string | null;
 };
 
 export type UpdateUserProfileInput = {
-	name?: string;
-	avatar?: string | null;
+	name: string;
 };
 
 export type UserStats = Record<string, number>;
