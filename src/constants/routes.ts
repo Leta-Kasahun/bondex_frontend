@@ -18,6 +18,7 @@ export const APP_ROUTES = {
 			PROFILE: "/settings/profile",
 			BUSINESS: "/settings/business",
 			INTEGRATIONS: {
+				BASE: "/settings/integrations",
 				TELEGRAM: "/settings/integrations/telegram",
 				GMAIL: "/settings/integrations/gmail",
 				WEBFORM: "/settings/integrations/webform",
