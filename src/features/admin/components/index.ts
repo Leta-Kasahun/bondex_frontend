@@ -2,5 +2,8 @@ export * from "./AdminDashboardOverview";
 export * from "./AdminDashboardSidebar";
 export * from "./AdminDashboardTopbar";
 export * from "./AdminDashboardShell";
+export * from "./analytics";
+export * from "./security";
+export * from "./settings";
 export * from "./systems";
 export * from "./users";

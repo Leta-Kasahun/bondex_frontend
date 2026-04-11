@@ -1,6 +1,7 @@
 import { Activity, BarChart3, Database, Server, ShieldCheck, Workflow } from "lucide-react";
 import { DashboardStatCard, SharedSelectField } from "@/src/features/shared";
 import { useAdminSystemStats } from "../hooks";
+import { AdminAnalyticsPanel } from "./analytics";
 import { IntegrationSyncCard } from "@/src/features/users/components/IntegrationSyncCard";
 
 export function AdminDashboardOverview() {
@@ -94,6 +95,12 @@ export function AdminDashboardOverview() {
           />
         </div>
       </section>
+
+      <AdminAnalyticsPanel
+        title="Enterprise analytics"
+        description="Cross-platform funnel analytics powered by backend admin aggregations."
+        stats={stats}
+      />
     </main>
   );
 }

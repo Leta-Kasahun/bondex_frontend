@@ -2,6 +2,7 @@
 
 import { ServerCog } from "lucide-react";
 import { Card, CardContent } from "@/src/components/ui/card";
+import { AdminAnalyticsPanel } from "../analytics";
 import { useAdminSystemStats } from "../../hooks";
 import { AdminSystemSignals } from "./AdminSystemSignals";
 import { AdminSystemStatsCards } from "./AdminSystemStatsCards";
@@ -41,6 +42,11 @@ export function AdminSystemManagementPage() {
       {!isLoading && !isError ? (
         <>
           <AdminSystemStatsCards stats={stats} />
+          <AdminAnalyticsPanel
+            title="System analytics"
+            description="Operational funnel and pipeline insights for platform-wide system management."
+            stats={stats}
+          />
           <AdminSystemSignals stats={stats} />
         </>
       ) : null}
