@@ -44,7 +44,11 @@ export const useUserAuth = () => {
 		signupUserWithGoogle(payload),
 		{
 			onSuccess: (session) => {
-				setAuth(session.accessToken, "USER");
+				setAuth(session.accessToken, "USER", {
+					name: session.name,
+					email: session.email,
+					avatar: null,
+				});
 			},
 		}
 	);
@@ -54,7 +58,11 @@ export const useUserAuth = () => {
 		return loginUser(payload);
 	}, {
 		onSuccess: (session) => {
-			setAuth(session.accessToken, "USER");
+			setAuth(session.accessToken, "USER", {
+				name: session.name,
+				email: session.email,
+				avatar: null,
+			});
 		},
 	});
 
@@ -62,7 +70,11 @@ export const useUserAuth = () => {
 		loginUserWithGoogle(payload),
 		{
 			onSuccess: (session) => {
-				setAuth(session.accessToken, "USER");
+				setAuth(session.accessToken, "USER", {
+					name: session.name,
+					email: session.email,
+					avatar: null,
+				});
 			},
 		}
 	);

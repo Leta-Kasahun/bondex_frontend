@@ -5,12 +5,15 @@ import { APP_CONSTANTS } from "../constants/config";
 import { type AuthRole, useAuthStore } from "../stores/useAuthStore";
 
 export const useAuth = () => {
-	const { accessToken, role, isAuthenticated, setAuth, clearAuth } = useAuthStore();
+	const { accessToken, role, name, email, avatar, isAuthenticated, setAuth, clearAuth } = useAuthStore();
 
 	return useMemo(
 		() => ({
 			accessToken,
 			role,
+			name,
+			email,
+			avatar,
 			isAuthenticated,
 			isAdmin: role === APP_CONSTANTS.AUTH_SUBJECT.ADMIN,
 			isUser: role === APP_CONSTANTS.AUTH_SUBJECT.USER,
@@ -18,6 +21,6 @@ export const useAuth = () => {
 			setAuth,
 			clearAuth,
 		}),
-		[accessToken, role, isAuthenticated, setAuth, clearAuth]
+		[accessToken, role, name, email, avatar, isAuthenticated, setAuth, clearAuth]
 	);
 };
