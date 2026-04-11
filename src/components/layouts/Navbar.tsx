@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { APP_ROUTES } from "@/src/constants";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useAdminAuth } from "@/src/features/auths/admin";
+import { useUserAuth } from "@/src/features/auths/user";
+import { AuthenticatedAvatarMenu } from "@/src/features/shared";
 import { Logo } from "../home/Logo";
 import { NavLinks,type NavLinkItem } from "../molecules/NavLinks";
 import { Button } from "../ui/button";
@@ -22,9 +27,34 @@ const navLinks: NavLinkItem[] = [
 ];
 
 export function Navbar() {
+  const router = useRouter();
+  const { isAuthenticated, role, name, email, avatar } = useAuth();
+  const { logoutMutation: userLogoutMutation } = useUserAuth();
+  const { logoutMutation: adminLogoutMutation } = useAdminAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAmharic, setIsAmharic] = useState(false);
+
+  const onLogout = () => {
+    if (role === "ADMIN") {
+      adminLogoutMutation.mutate(undefined, {
+        onSettled: () => {
+          setIsMenuOpen(false);
+          router.push(APP_ROUTES.ROOT);
+        },
+      });
+      return;
+    }
+
+    userLogoutMutation.mutate(undefined, {
+      onSettled: () => {
+        setIsMenuOpen(false);
+        router.push(APP_ROUTES.ROOT);
+      },
+    });
+  };
+
+  const isLoggingOut = role === "ADMIN" ? adminLogoutMutation.isPending : userLogoutMutation.isPending;
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 12);
@@ -63,12 +93,25 @@ export function Navbar() {
             <Switch checked={isAmharic} onCheckedChange={setIsAmharic} aria-label="Language layout toggle" />
             <span className={cn("text-sm font-medium", isAmharic ? "text-foreground" : "text-muted-foreground")}>AM</span>
           </div>
-          <Button asChild variant="ghost" className="h-10 px-5 text-[15px]">
-            <Link href={APP_ROUTES.AUTH.LOGIN}>Sign In</Link>
-          </Button>
-          <Button asChild className="h-10 px-6 text-[15px]">
-            <Link href={APP_ROUTES.AUTH.REGISTER}>Start Free</Link>
-          </Button>
+          {isAuthenticated && role ? (
+            <AuthenticatedAvatarMenu
+              role={role}
+              onLogout={onLogout}
+              isLoggingOut={isLoggingOut}
+              name={name}
+              email={email}
+              avatarUrl={avatar}
+            />
+          ) : (
+            <>
+              <Button asChild variant="ghost" className="h-10 px-5 text-[15px]">
+                <Link href={APP_ROUTES.AUTH.LOGIN}>Sign In</Link>
+              </Button>
+              <Button asChild className="h-10 px-6 text-[15px]">
+                <Link href={APP_ROUTES.AUTH.REGISTER}>Start Free</Link>
+              </Button>
+            </>
+          )}
         </div>
         <button
           type="button"
@@ -104,14 +147,28 @@ export function Navbar() {
               <span className={cn("text-xs font-medium", isAmharic ? "text-foreground" : "text-muted-foreground")}>AM</span>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <Button asChild variant="outline" className="h-10 text-[15px]">
-              <Link href={APP_ROUTES.AUTH.LOGIN}>Sign In</Link>
-            </Button>
-            <Button asChild className="h-10 text-[15px]">
-              <Link href={APP_ROUTES.AUTH.REGISTER}>Start Free</Link>
-            </Button>
-          </div>
+          {isAuthenticated && role ? (
+            <div className="mt-4">
+              <AuthenticatedAvatarMenu
+                role={role}
+                onLogout={onLogout}
+                isLoggingOut={isLoggingOut}
+                fullWidth
+                name={name}
+                email={email}
+                avatarUrl={avatar}
+              />
+            </div>
+          ) : (
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <Button asChild variant="outline" className="h-10 text-[15px]">
+                <Link href={APP_ROUTES.AUTH.LOGIN}>Sign In</Link>
+              </Button>
+              <Button asChild className="h-10 text-[15px]">
+                <Link href={APP_ROUTES.AUTH.REGISTER}>Start Free</Link>
+              </Button>
+            </div>
+          )}
         </div>
       ) : null}
     </header>

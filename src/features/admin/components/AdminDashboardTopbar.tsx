@@ -1,7 +1,13 @@
+"use client";
+
 import { Bell, ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
+import { useRouter } from "next/navigation";
+import { APP_ROUTES } from "@/src/constants";
 import { Input } from "@/src/components/ui/input";
 import { SharedIconAction } from "@/src/features/shared";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useAdminAuth } from "@/src/features/auths/admin";
+import { AuthenticatedAvatarMenu } from "@/src/features/shared";
 
 type AdminDashboardTopbarProps = {
   onToggleSidebar: () => void;
@@ -14,6 +20,10 @@ export function AdminDashboardTopbar({
   isSidebarCollapsed,
   onToggleSidebarCollapse,
 }: AdminDashboardTopbarProps) {
+  const router = useRouter();
+  const { name, email, avatar } = useAuth();
+  const { logoutMutation } = useAdminAuth();
+
   return (
     <header className="border-b border-border/70 bg-[#FFFFFF] px-4 py-3 md:px-6">
       <div className="flex items-center gap-3">
@@ -42,9 +52,20 @@ export function AdminDashboardTopbar({
 
         <div className="ml-auto flex items-center gap-2">
           <SharedIconAction icon={Bell} label="Notifications" />
-          <Avatar size="lg">
-            <AvatarFallback>AD</AvatarFallback>
-          </Avatar>
+          <AuthenticatedAvatarMenu
+            role="ADMIN"
+            onLogout={() =>
+              logoutMutation.mutate(undefined, {
+                onSettled: () => {
+                  router.push("/admin/login");
+                },
+              })
+            }
+            isLoggingOut={logoutMutation.isPending}
+            name={name}
+            email={email}
+            avatarUrl={avatar}
+          />
         </div>
       </div>
     </header>

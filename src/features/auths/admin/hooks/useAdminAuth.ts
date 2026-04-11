@@ -22,7 +22,11 @@ export const useAdminAuth = () => {
 		verifyAdminOtp(payload),
 		{
 			onSuccess: (session) => {
-				setAuth(session.accessToken, "ADMIN");
+				setAuth(session.accessToken, "ADMIN", {
+					name: session.name,
+					email: session.email,
+					avatar: null,
+				});
 			},
 		}
 	);

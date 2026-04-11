@@ -1,7 +1,14 @@
+"use client";
+
 import { Bell, ChevronLeft, ChevronRight, Menu, Search } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
+import { useRouter } from "next/navigation";
+import { APP_ROUTES } from "@/src/constants";
 import { Input } from "@/src/components/ui/input";
 import { SharedIconAction } from "@/src/features/shared";
+import { useAuth } from "@/src/hooks/useAuth";
+import { useUserAuth } from "@/src/features/auths/user";
+import { AuthenticatedAvatarMenu } from "@/src/features/shared";
+import { useUserProfile } from "@/src/features/users";
 
 type UserDashboardTopbarProps = {
   onToggleSidebar: () => void;
@@ -10,6 +17,11 @@ type UserDashboardTopbarProps = {
 };
 
 export function UserDashboardTopbar({ onToggleSidebar, isSidebarCollapsed, onToggleSidebarCollapse }: UserDashboardTopbarProps) {
+  const router = useRouter();
+  const { name, email, avatar } = useAuth();
+  const { logoutMutation } = useUserAuth();
+  const { data: profile } = useUserProfile();
+
   return (
     <header className="border-b border-border/70 bg-[#FFFFFF] px-4 py-3 md:px-6">
       <div className="flex items-center gap-3">
@@ -38,9 +50,20 @@ export function UserDashboardTopbar({ onToggleSidebar, isSidebarCollapsed, onTog
 
         <div className="ml-auto flex items-center gap-2">
           <SharedIconAction icon={Bell} label="Notifications" />
-          <Avatar size="lg">
-            <AvatarFallback>UB</AvatarFallback>
-          </Avatar>
+          <AuthenticatedAvatarMenu
+            role="USER"
+            onLogout={() =>
+              logoutMutation.mutate(undefined, {
+                onSettled: () => {
+                  router.push(APP_ROUTES.AUTH.LOGIN);
+                },
+              })
+            }
+            isLoggingOut={logoutMutation.isPending}
+            name={profile?.name ?? name}
+            email={profile?.email ?? email}
+            avatarUrl={profile?.avatar ?? avatar}
+          />
         </div>
       </div>
     </header>
