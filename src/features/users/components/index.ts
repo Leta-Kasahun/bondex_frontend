@@ -4,3 +4,4 @@ export * from "./UserDashboardTopbar";
 export * from "./UserDashboardOverview";
 export * from "./UserDashboardShell";
 export * from "./UserSettingsProfilePage";
+export * from "./UserDashboardAnalytics";

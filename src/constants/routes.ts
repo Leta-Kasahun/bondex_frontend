@@ -24,6 +24,10 @@ export const APP_ROUTES = {
 				WEBFORM: "/settings/integrations/webform",
 			},
 		},
+		ADMIN: {
+			DASHBOARD: "/admin/dashboard",
+			USERS: "/admin/users",
+		},
 		ADMIN_DASHBOARD: "/admin/dashboard",
 	},
 	PUBLIC: {

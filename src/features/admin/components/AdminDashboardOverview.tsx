@@ -1,9 +1,20 @@
-import { Activity, AlertTriangle, ShieldCheck, Users } from "lucide-react";
-import { BarChart3, Database, Server, Workflow } from "lucide-react";
+import { Activity, BarChart3, Database, Server, ShieldCheck, Workflow } from "lucide-react";
 import { DashboardStatCard, SharedSelectField } from "@/src/features/shared";
+import { useAdminSystemStats } from "../hooks";
 import { IntegrationSyncCard } from "@/src/features/users/components/IntegrationSyncCard";
 
 export function AdminDashboardOverview() {
+  const { data: stats } = useAdminSystemStats();
+
+  const leadsByPlatform = stats?.leadsByPlatform ?? [];
+  const dealsByStage = stats?.dealsByStage ?? [];
+  const topPlatform = leadsByPlatform
+    .slice()
+    .sort((left, right) => right.count - left.count)[0]?.platform ?? "manual";
+  const topDealStage = dealsByStage
+    .slice()
+    .sort((left, right) => right.count - left.count)[0]?.stage ?? "qualified";
+
   return (
     <main className="flex-1 space-y-6 bg-background p-4 md:p-6">
       <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -24,10 +35,30 @@ export function AdminDashboardOverview() {
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <DashboardStatCard icon={Users} title="Managed users" value="3,240" note="+4.1% from last week" />
-        <DashboardStatCard icon={Activity} title="Requests/min" value="1,982" note="Stable throughput" />
-        <DashboardStatCard icon={ShieldCheck} title="Security score" value="98.7%" note="No critical incidents" />
-        <DashboardStatCard icon={AlertTriangle} title="Open alerts" value="3" note="2 medium, 1 low" />
+        <DashboardStatCard
+          icon={Activity}
+          title="Total users"
+          value={String(stats?.totalUsers ?? 0)}
+          note={`${stats?.newUsersThisWeek ?? 0} new this week`}
+        />
+        <DashboardStatCard
+          icon={ShieldCheck}
+          title="Active users"
+          value={String(stats?.totalActiveUsers ?? 0)}
+          note="User access under control"
+        />
+        <DashboardStatCard
+          icon={BarChart3}
+          title="Leads tracked"
+          value={String(stats?.totalLeads ?? 0)}
+          note={`${stats?.newLeadsThisWeek ?? 0} new this week`}
+        />
+        <DashboardStatCard
+          icon={Workflow}
+          title="Deals in pipeline"
+          value={String(stats?.totalDeals ?? 0)}
+          note={`${stats?.totalWonDeals ?? 0} won`}
+        />
       </section>
 
       <section className="space-y-3">
@@ -38,28 +69,28 @@ export function AdminDashboardOverview() {
             title="Infrastructure"
             subtitle="Core services healthy"
             status="connected"
-            message="API gateways and workers are healthy with normal latency bands."
+            message="API gateways and workers are available with consistent response patterns."
           />
           <IntegrationSyncCard
             icon={Database}
             title="Data integrity"
             subtitle="Storage and indexing"
             status="connected"
-            message="Backups completed and index jobs are running on schedule."
+            message={`Top lead source currently: ${topPlatform}. Data indexing is consistent.`}
           />
           <IntegrationSyncCard
             icon={Workflow}
             title="Automation"
             subtitle="Pipelines and jobs"
             status="pending"
-            message="One low-priority scheduled task is delayed and under retry."
+            message={`Most frequent deal stage is ${topDealStage}, guiding pipeline optimization.`}
           />
           <IntegrationSyncCard
             icon={BarChart3}
             title="Performance"
             subtitle="Load and response"
             status="connected"
-            message="Peak-hour response times remain within target thresholds."
+            message={`Current won revenue is $${Math.round(stats?.totalRevenue ?? 0).toLocaleString("en-US")}.`}
           />
         </div>
       </section>

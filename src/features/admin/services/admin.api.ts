@@ -1,4 +1,5 @@
 import { API_ROUTES } from "@/src/config/api";
+import { clientApi } from "@/src/lib/api/client";
 import {
 	requestDelete,
 	requestGet,
@@ -6,22 +7,45 @@ import {
 } from "@/src/features/shared/services";
 import {
 	type AdminSystemStats,
+	type AdminUserDetails,
+	type AdminUserListMeta,
+	type AdminUserListResponse,
 	type AdminUser,
 	type AdminUserListQuery,
 	type MessageResponse,
 } from "../types/admin.types";
 
-export const listAdminUsers = (params?: AdminUserListQuery) =>
-	requestGet<AdminUser[]>(`${API_ROUTES.ADMIN.BASE}/users`, { params });
+type ApiEnvelope<T> = {
+	data: T;
+	meta?: AdminUserListMeta;
+	message?: string;
+	success?: boolean;
+};
+
+export const listAdminUsers = async (params?: AdminUserListQuery): Promise<AdminUserListResponse> => {
+	const response = await clientApi.get<ApiEnvelope<AdminUser[]>>(`${API_ROUTES.ADMIN.BASE}/users`, {
+		params,
+	});
+
+	return {
+		items: response.data.data ?? [],
+		meta: response.data.meta ?? {
+			total: 0,
+			page: params?.page ?? 1,
+			limit: params?.limit ?? 10,
+			offset: 0,
+		},
+	};
+};
 
 export const getAdminUserDetails = (userId: string) =>
-	requestGet<AdminUser>(`${API_ROUTES.ADMIN.BASE}/users/${userId}`);
+	requestGet<AdminUserDetails>(`${API_ROUTES.ADMIN.BASE}/users/${userId}`);
 
 export const blockAdminUser = (userId: string) =>
-	requestPatch<MessageResponse>(`${API_ROUTES.ADMIN.BASE}/users/${userId}/block`);
+	requestPatch<AdminUser>(`${API_ROUTES.ADMIN.BASE}/users/${userId}/block`);
 
 export const unblockAdminUser = (userId: string) =>
-	requestPatch<MessageResponse>(`${API_ROUTES.ADMIN.BASE}/users/${userId}/unblock`);
+	requestPatch<AdminUser>(`${API_ROUTES.ADMIN.BASE}/users/${userId}/unblock`);
 
 export const deleteAdminUser = (userId: string) =>
 	requestDelete<MessageResponse>(`${API_ROUTES.ADMIN.BASE}/users/${userId}`);

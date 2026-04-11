@@ -1,12 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  Activity,
-  Bell,
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
-  Settings,
-  ShieldCheck,
   Users,
   X,
 } from "lucide-react";
@@ -21,12 +20,18 @@ type AdminDashboardSidebarProps = {
 };
 
 const navItems = [
-  { label: "Dashboard", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: LayoutDashboard, active: true },
-  { label: "Users", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: Users },
-  { label: "System", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: Activity },
-  { label: "Security", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: ShieldCheck },
-  { label: "Notifications", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: Bell },
-  { label: "Settings", href: APP_ROUTES.DASHBOARD.ADMIN_DASHBOARD, icon: Settings },
+  {
+    label: "Dashboard",
+    href: APP_ROUTES.DASHBOARD.ADMIN.DASHBOARD,
+    icon: LayoutDashboard,
+    matcher: (path: string) => path === APP_ROUTES.DASHBOARD.ADMIN.DASHBOARD,
+  },
+  {
+    label: "Users",
+    href: APP_ROUTES.DASHBOARD.ADMIN.USERS,
+    icon: Users,
+    matcher: (path: string) => path.startsWith(APP_ROUTES.DASHBOARD.ADMIN.USERS),
+  },
 ];
 
 export function AdminDashboardSidebar({
@@ -34,6 +39,8 @@ export function AdminDashboardSidebar({
   isCollapsed = false,
   onToggleCollapse,
 }: AdminDashboardSidebarProps) {
+  const pathname = usePathname();
+
   return (
     <aside className={cn("h-full border-r border-sidebar-border bg-sidebar p-4", isCollapsed ? "w-20" : "w-72")}>
       <div className="mb-6 flex items-center justify-between">
@@ -63,7 +70,7 @@ export function AdminDashboardSidebar({
             key={item.label}
             href={item.href}
             onClick={onClose}
-            className={cn(item.active ? "sidebar-link active" : "sidebar-link", isCollapsed ? "justify-center px-2" : "")}
+            className={cn(item.matcher(pathname) ? "sidebar-link active" : "sidebar-link", isCollapsed ? "justify-center px-2" : "")}
           >
             <item.icon className="icon h-4 w-4" aria-hidden />
             {!isCollapsed ? <span>{item.label}</span> : null}
