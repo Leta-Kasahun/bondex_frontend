@@ -9,6 +9,8 @@ import { cn } from "@/src/utils/cn";
 import { AdminDashboardOverview } from "./AdminDashboardOverview";
 import { AdminDashboardSidebar } from "./AdminDashboardSidebar";
 import { AdminDashboardTopbar } from "./AdminDashboardTopbar";
+import { AdminSecurityManagementPage } from "./security";
+import { AdminSettingsManagementPage } from "./settings";
 import { AdminSystemManagementPage } from "./systems";
 import { AdminUserManagementPage } from "./users";
 
@@ -19,6 +21,14 @@ export function AdminDashboardShell() {
   const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed);
 
   const renderContent = () => {
+    if (pathname.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SETTINGS)) {
+      return <AdminSettingsManagementPage />;
+    }
+
+    if (pathname.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SECURITY)) {
+      return <AdminSecurityManagementPage />;
+    }
+
     if (pathname.startsWith(APP_ROUTES.DASHBOARD.ADMIN.SYSTEM)) {
       return <AdminSystemManagementPage />;
     }
