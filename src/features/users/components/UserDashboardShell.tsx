@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import { UserDashboardAiWidget } from "@/src/features/ai";
 import { useUIStore } from "@/src/stores";
 import { cn } from "@/src/utils/cn";
@@ -8,10 +8,15 @@ import { UserDashboardSidebar } from "./UserDashboardSidebar";
 import { UserDashboardTopbar } from "./UserDashboardTopbar";
 import { UserDashboardOverview } from "./UserDashboardOverview";
 
-export function UserDashboardShell() {
+type UserDashboardShellProps = {
+  children?: ReactNode;
+};
+
+export function UserDashboardShell({ children }: UserDashboardShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isSidebarCollapsed = useUIStore((state) => state.isSidebarCollapsed);
   const setSidebarCollapsed = useUIStore((state) => state.setSidebarCollapsed);
+  const content = useMemo(() => children ?? <UserDashboardOverview />, [children]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -54,7 +59,7 @@ export function UserDashboardShell() {
             isSidebarCollapsed={isSidebarCollapsed}
             onToggleSidebarCollapse={() => setSidebarCollapsed(!isSidebarCollapsed)}
           />
-          <UserDashboardOverview />
+          {content}
           <UserDashboardAiWidget />
         </div>
       </div>

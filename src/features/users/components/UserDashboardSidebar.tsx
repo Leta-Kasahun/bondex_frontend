@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, Bell, ChevronLeft, ChevronRight, LayoutDashboard, Link2, Settings, Users, X } from "lucide-react";
+import { BarChart3, Bell, BriefcaseBusiness, ChevronLeft, ChevronRight, LayoutDashboard, Link2, Settings, Users, X } from "lucide-react";
 import { APP_ROUTES } from "@/src/constants";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/utils/cn";
@@ -12,6 +12,7 @@ type UserDashboardSidebarProps = {
 
 const navItems = [
   { label: "Dashboard", href: APP_ROUTES.DASHBOARD.USERS, icon: LayoutDashboard, active: true },
+  { label: "Businesses", href: APP_ROUTES.DASHBOARD.BUSINESSES, icon: BriefcaseBusiness },
   { label: "Leads", href: APP_ROUTES.DASHBOARD.LEADS, icon: Users },
   { label: "Deals", href: APP_ROUTES.DASHBOARD.DEALS, icon: BarChart3 },
   { label: "Integrations", href: APP_ROUTES.DASHBOARD.SETTINGS.INTEGRATIONS.TELEGRAM, icon: Link2 },
