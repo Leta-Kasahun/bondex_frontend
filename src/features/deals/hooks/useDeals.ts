@@ -12,10 +12,11 @@ import {
 
 const DEAL_LIST_KEY = buildFeatureKey("deals", "list");
 
-export const useDeals = (params?: DealListQuery) =>
+export const useDeals = (params?: DealListQuery, enabled = true) =>
 	useFeatureQuery({
 		queryKey: [...DEAL_LIST_KEY, JSON.stringify(params ?? {})],
 		queryFn: () => listDeals(params),
+		enabled,
 	});
 
 export const useConvertLeadToDeal = () =>
