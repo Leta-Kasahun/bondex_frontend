@@ -6,7 +6,7 @@ import {
 	listAdminUsers,
 	unblockAdminUser,
 } from "../services";
-import { type AdminUserListQuery } from "../types/admin.types";
+import { type AdminAnalyticsRange, type AdminUserListQuery } from "../types/admin.types";
 import {
 	buildFeatureKey,
 	useFeatureMutation,
@@ -29,10 +29,10 @@ export const useAdminUserDetails = (userId?: string) =>
 		enabled: Boolean(userId),
 	});
 
-export const useAdminSystemStats = () =>
+export const useAdminSystemStats = (range: AdminAnalyticsRange = "weekly") =>
 	useFeatureQuery({
-		queryKey: ADMIN_STATS_KEY,
-		queryFn: getAdminSystemStats,
+		queryKey: [...ADMIN_STATS_KEY, range],
+		queryFn: () => getAdminSystemStats({ range }),
 	});
 
 export const useBlockAdminUser = () =>

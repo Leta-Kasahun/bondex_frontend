@@ -1,11 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import { Activity, BarChart3, Database, Server, ShieldCheck, Workflow } from "lucide-react";
 import { DashboardStatCard, SharedSelectField } from "@/src/features/shared";
 import { useAdminSystemStats } from "../hooks";
 import { AdminAnalyticsPanel } from "./analytics";
 import { IntegrationSyncCard } from "@/src/features/users/components/IntegrationSyncCard";
+import { type AdminAnalyticsRange } from "../types/admin.types";
+
+const rangeOptions: Array<{ label: string; value: AdminAnalyticsRange }> = [
+  { label: "Today", value: "today" },
+  { label: "This Week", value: "weekly" },
+  { label: "This Month", value: "monthly" },
+];
 
 export function AdminDashboardOverview() {
-  const { data: stats } = useAdminSystemStats();
+  const [range, setRange] = useState<AdminAnalyticsRange>("weekly");
+  const { data: stats } = useAdminSystemStats(range);
+  const newUsersInRange = stats?.newUsersInRange ?? stats?.newUsersThisWeek ?? 0;
+  const newLeadsInRange = stats?.newLeadsInRange ?? stats?.newLeadsThisWeek ?? 0;
 
   const leadsByPlatform = stats?.leadsByPlatform ?? [];
   const dealsByStage = stats?.dealsByStage ?? [];
@@ -25,13 +38,9 @@ export function AdminDashboardOverview() {
         </div>
         <SharedSelectField
           placeholder="Filter range"
-          value="weekly"
-          options={[
-            { label: "Today", value: "today" },
-            { label: "This Week", value: "weekly" },
-            { label: "This Month", value: "monthly" },
-          ]}
-          onValueChange={() => {}}
+          value={range}
+          options={rangeOptions}
+          onValueChange={(value) => setRange(value as AdminAnalyticsRange)}
         />
       </section>
 
@@ -40,7 +49,7 @@ export function AdminDashboardOverview() {
           icon={Activity}
           title="Total users"
           value={String(stats?.totalUsers ?? 0)}
-          note={`${stats?.newUsersThisWeek ?? 0} new this week`}
+          note={`${newUsersInRange} new in selected range`}
         />
         <DashboardStatCard
           icon={ShieldCheck}
@@ -52,7 +61,7 @@ export function AdminDashboardOverview() {
           icon={BarChart3}
           title="Leads tracked"
           value={String(stats?.totalLeads ?? 0)}
-          note={`${stats?.newLeadsThisWeek ?? 0} new this week`}
+          note={`${newLeadsInRange} new in selected range`}
         />
         <DashboardStatCard
           icon={Workflow}
@@ -98,8 +107,9 @@ export function AdminDashboardOverview() {
 
       <AdminAnalyticsPanel
         title="Enterprise analytics"
-        description="Cross-platform funnel analytics powered by backend admin aggregations."
+        description="Cross-platform funnel analytics powered by backend admin aggregations and selected timeframe."
         stats={stats}
+        rangeLabel={rangeOptions.find((option) => option.value === range)?.label ?? "This Week"}
       />
     </main>
   );

@@ -19,6 +19,8 @@ const formatRevenue = (value: number): string => {
 };
 
 export function AdminSystemStatsCards({ stats }: AdminSystemStatsCardsProps) {
+  const newLeadsInRange = stats?.newLeadsInRange ?? stats?.newLeadsThisWeek ?? 0;
+
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
       <DashboardStatCard
@@ -31,7 +33,7 @@ export function AdminSystemStatsCards({ stats }: AdminSystemStatsCardsProps) {
         icon={BarChart3}
         title="Total leads"
         value={String(stats?.totalLeads ?? 0)}
-        note={`${stats?.newLeadsThisWeek ?? 0} added this week`}
+        note={`${newLeadsInRange} added in selected range`}
       />
       <DashboardStatCard
         icon={Workflow}

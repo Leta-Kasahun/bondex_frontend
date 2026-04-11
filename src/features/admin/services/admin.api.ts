@@ -6,6 +6,7 @@ import {
 	requestPatch,
 } from "@/src/features/shared/services";
 import {
+	type AdminSystemStatsQuery,
 	type AdminSystemStats,
 	type AdminUserDetails,
 	type AdminUserListMeta,
@@ -50,5 +51,5 @@ export const unblockAdminUser = (userId: string) =>
 export const deleteAdminUser = (userId: string) =>
 	requestDelete<MessageResponse>(`${API_ROUTES.ADMIN.BASE}/users/${userId}`);
 
-export const getAdminSystemStats = () =>
-	requestGet<AdminSystemStats>(`${API_ROUTES.ADMIN.BASE}/stats/system`);
+export const getAdminSystemStats = (params?: AdminSystemStatsQuery) =>
+	requestGet<AdminSystemStats>(`${API_ROUTES.ADMIN.BASE}/stats/system`, { params });

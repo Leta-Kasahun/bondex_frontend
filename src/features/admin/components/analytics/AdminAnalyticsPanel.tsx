@@ -19,6 +19,7 @@ type AdminAnalyticsPanelProps = {
   title: string;
   description: string;
   stats?: AdminSystemStats;
+  rangeLabel?: string;
 };
 
 type ChartPoint = {
@@ -36,7 +37,7 @@ const normalizeData = (rows: Array<{ label: string; value: number }>): ChartPoin
   return [{ label: "No data", value: 0 }];
 };
 
-export function AdminAnalyticsPanel({ title, description, stats }: AdminAnalyticsPanelProps) {
+export function AdminAnalyticsPanel({ title, description, stats, rangeLabel }: AdminAnalyticsPanelProps) {
   const platformData = normalizeData(
     (stats?.leadsByPlatform ?? []).map((item) => ({
       label: item.platform,
@@ -60,10 +61,15 @@ export function AdminAnalyticsPanel({ title, description, stats }: AdminAnalytic
 
   return (
     <section className="space-y-3">
-      <div>
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <h2 className="font-heading text-xl font-semibold text-foreground">{title}</h2>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        {rangeLabel ? (
+          <span className="inline-flex w-fit rounded-full border border-[#8BAACF]/40 bg-[#FFFFFF] px-3 py-1 text-xs font-medium text-muted-foreground">
+            Range: {rangeLabel}
+          </span>
+        ) : null}
       </div>
+      <p className="text-sm text-muted-foreground">{description}</p>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <Card className="border-border/70 bg-[#FFFFFF] xl:col-span-2">

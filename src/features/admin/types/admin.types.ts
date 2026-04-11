@@ -64,11 +64,19 @@ export type AdminSystemStats = {
 	totalDeals: number;
 	totalWonDeals: number;
 	totalRevenue: number;
+	newUsersInRange?: number;
+	newLeadsInRange?: number;
 	newUsersThisWeek: number;
 	newLeadsThisWeek: number;
 	leadsByPlatform: Array<{ platform: string; count: number }>;
 	leadsByStatus: Array<{ status: string; count: number }>;
 	dealsByStage: Array<{ stage: string; count: number }>;
+};
+
+export type AdminAnalyticsRange = "today" | "weekly" | "monthly";
+
+export type AdminSystemStatsQuery = {
+	range?: AdminAnalyticsRange;
 };
 
 export type MessageResponse = {

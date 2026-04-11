@@ -19,13 +19,15 @@ const formatRevenue = (value: number): string => {
 };
 
 export function AdminUserStatsCards({ stats }: AdminUserStatsCardsProps) {
+  const newUsersInRange = stats?.newUsersInRange ?? stats?.newUsersThisWeek ?? 0;
+
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
       <DashboardStatCard
         icon={Users}
         title="Total users"
         value={String(stats?.totalUsers ?? 0)}
-        note={`${stats?.newUsersThisWeek ?? 0} added this week`}
+        note={`${newUsersInRange} added in selected range`}
       />
       <DashboardStatCard
         icon={Activity}
