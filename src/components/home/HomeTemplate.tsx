@@ -1,5 +1,6 @@
 import { Footer } from "@/src/components/layouts/Footer";
 import { Navbar } from "@/src/components/layouts/Navbar";
+import { CookieConsentBanner } from "@/src/components/home/CookieConsentBanner";
 import { AiSection } from "@/src/components/home/sections/AiSection";
 import { CtaSection } from "@/src/components/home/sections/CtaSection";
 import { FaqSection } from "@/src/components/home/sections/FaqSection";
@@ -33,6 +34,7 @@ export function HomeTemplate() {
         <CtaSection />
       </main>
       <PublicAiWidget />
+      <CookieConsentBanner />
       <Footer />
     </div>
   );
