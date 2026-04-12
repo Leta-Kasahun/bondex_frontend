@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { APP_ROUTES } from "@/src/constants";
 import { Button } from "@/src/components/ui/button";
+import { GoogleQuickAccessCard } from "@/src/components/home/GoogleQuickAccessCard";
 import heroImage from "../../../../public/hero.png";
 
 export function HeroSection() {
@@ -35,6 +36,7 @@ export function HeroSection() {
               </Link>
             </Button>
           </div>
+          <GoogleQuickAccessCard />
         </div>
 
         <div className="animate-in slide-in-from-right-8 duration-700">
