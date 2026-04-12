@@ -1,0 +1,1 @@
+export const UI_ERROR_MESSAGE = "Try again";

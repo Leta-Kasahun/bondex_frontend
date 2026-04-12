@@ -1,5 +1,6 @@
 import axios from "axios";
 import { env } from "../../config/env";
+import { UI_ERROR_MESSAGE } from "@/src/constants";
 
 type PersistedAuthState = {
 	state?: {
@@ -47,6 +48,11 @@ clientApi.interceptors.request.use((config) => {
 
 	return config;
 });
+
+clientApi.interceptors.response.use(
+	(response) => response,
+	async () => Promise.reject(new Error(UI_ERROR_MESSAGE))
+);
 
 export const createApiUrl = (path: string): string =>
 	`${env.API_BASE_URL}${normalizePath(path)}`;

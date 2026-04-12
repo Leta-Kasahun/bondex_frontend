@@ -39,6 +39,7 @@ export default function RootLoading() {
             src="/bondex.png"
             alt="Bondex Logo"
             fill
+            sizes="96px"
             className="object-contain"
             priority
           />

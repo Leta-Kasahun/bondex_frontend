@@ -12,7 +12,7 @@ const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/admin/login"];
 const USER_ROUTES = ["/dashboard", "/users", "/businesses", "/leads", "/deals", "/notifications", "/settings"];
 const ADMIN_ROUTES = ["/admin/dashboard"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	const hasUserSession = Boolean(request.cookies.get(USER_COOKIE)?.value);
