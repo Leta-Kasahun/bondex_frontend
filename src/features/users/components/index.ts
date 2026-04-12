@@ -5,3 +5,4 @@ export * from "./UserDashboardOverview";
 export * from "./UserDashboardShell";
 export * from "./UserSettingsProfilePage";
 export * from "./UserDashboardAnalytics";
+export * from "./UserDashboardExecutiveHero";

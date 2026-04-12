@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { APP_ROUTES } from "@/src/constants";
 import { Button } from "@/src/components/ui/button";
+import heroImage from "../../../../public/hero.png";
 
 export function HeroSection() {
   return (
@@ -39,11 +40,12 @@ export function HeroSection() {
         <div className="animate-in slide-in-from-right-8 duration-700">
           <div className="relative overflow-hidden rounded-3xl border border-white/50 bg-white/45 p-3 shadow-card-hover backdrop-blur-md">
             <Image
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80"
+              src={heroImage}
               alt="Sales team collaborating with dashboard screens"
               width={1400}
               height={980}
               priority
+              unoptimized
               className="h-[360px] w-full rounded-2xl object-cover md:h-[420px]"
             />
             <div className="absolute bottom-7 left-7 rounded-xl border border-white/50 bg-white/70 px-4 py-3 backdrop-blur-md">

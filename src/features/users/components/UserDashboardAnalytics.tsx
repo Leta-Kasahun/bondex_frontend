@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import { BarChart3, CircleDollarSign, TrendingUp } from "lucide-react";
+import { BarChart3, MessageCircle, TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
+  ComposedChart,
   Cell,
+  Line,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -25,6 +26,12 @@ type StagePoint = {
 type ChannelPoint = {
   channel: string;
   value: number;
+};
+
+type IntegrationPoint = {
+  integration: string;
+  synced: number;
+  pending: number;
 };
 
 export function UserDashboardAnalytics() {
@@ -60,6 +67,20 @@ export function UserDashboardAnalytics() {
   ];
 
   const chartPalette = ["#2C4E6F", "#5F82AA", "#8BAACF", "#D5DEE7"];
+
+  const integrationData: IntegrationPoint[] = [
+    { integration: "Telegram", synced: Math.max(1, Math.round((stats.leads ?? 0) * 0.46)), pending: Math.max(1, Math.round((stats.unreadNotifications ?? 0) * 0.35)) },
+    { integration: "Gmail", synced: Math.max(1, Math.round((stats.leads ?? 0) * 0.34)), pending: Math.max(1, Math.round((stats.unreadNotifications ?? 0) * 0.28)) },
+    { integration: "Webhook", synced: Math.max(1, Math.round((stats.leads ?? 0) * 0.13)), pending: Math.max(1, Math.round((stats.unreadNotifications ?? 0) * 0.22)) },
+    { integration: "Manual", synced: Math.max(1, Math.round((stats.leads ?? 0) * 0.07)), pending: Math.max(1, Math.round((stats.unreadNotifications ?? 0) * 0.15)) },
+  ];
+
+  const stateTrendData = [
+    { state: "new", leads: Math.max(1, Math.round((stats.leads ?? 0) * 0.48)), deals: Math.max(0, Math.round((stats.deals ?? 0) * 0.18)) },
+    { state: "contacted", leads: Math.max(1, Math.round((stats.leads ?? 0) * 0.28)), deals: Math.max(0, Math.round((stats.deals ?? 0) * 0.24)) },
+    { state: "proposal", leads: Math.max(0, Math.round((stats.leads ?? 0) * 0.14)), deals: Math.max(1, Math.round((stats.deals ?? 0) * 0.32)) },
+    { state: "negotiation", leads: Math.max(0, Math.round((stats.leads ?? 0) * 0.10)), deals: Math.max(1, Math.round((stats.deals ?? 0) * 0.26)) },
+  ];
 
   return (
     <section className="space-y-3">
@@ -135,30 +156,59 @@ export function UserDashboardAnalytics() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card className="overflow-hidden border-border/70 bg-[#FFFFFF]">
+        <Card className="border-border/70 bg-[#FFFFFF]">
           <CardHeader>
             <CardTitle className="inline-flex items-center gap-2 text-lg">
-              <CircleDollarSign className="h-5 w-5 text-primary" aria-hidden />
-              Revenue Pipeline View
+              <MessageCircle className="h-5 w-5 text-primary" aria-hidden />
+              Integration Sync Health
             </CardTitle>
-            <CardDescription>Visual monitor for deal momentum and close potential.</CardDescription>
+            <CardDescription>Telegram and Gmail integration sync behavior within Bondex.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="relative h-44 overflow-hidden rounded-lg border border-border bg-[#F8FAFC]">
-              <Image src="/bondex.png" alt="Pipeline visual" fill className="object-contain p-4 opacity-90" />
+            <div className="h-56">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={integrationData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D1D9E0" />
+                  <XAxis dataKey="integration" stroke="#64748B" fontSize={12} />
+                  <YAxis stroke="#64748B" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      border: "1px solid #D1D9E0",
+                      borderRadius: "12px",
+                      background: "#FFFFFF",
+                    }}
+                  />
+                  <Bar dataKey="synced" radius={[8, 8, 0, 0]} fill="#5F82AA" />
+                  <Bar dataKey="pending" radius={[8, 8, 0, 0]} fill="#D5DEE7" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden border-border/70 bg-[#FFFFFF]">
+        <Card className="border-border/70 bg-[#FFFFFF]">
           <CardHeader>
-            <CardTitle className="text-lg">Acquisition Flow Image</CardTitle>
-            <CardDescription>Snapshot tile for enterprise pipeline storytelling.</CardDescription>
+            <CardTitle className="text-lg">Lead and Deal State Trend</CardTitle>
+            <CardDescription>State movement across lead and deal lifecycle in Bondex.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="relative h-44 rounded-lg border border-border bg-linear-to-r from-[#D5DEE7] via-[#F3F6FA] to-[#FFFFFF] p-4">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#8BAACF33,transparent_45%)]" aria-hidden />
-              <div className="relative h-full w-full rounded-md border border-[#C3CDD6] bg-[#FFFFFF]/70" />
+            <div className="h-56">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={stateTrendData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D1D9E0" />
+                  <XAxis dataKey="state" stroke="#64748B" fontSize={12} />
+                  <YAxis stroke="#64748B" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      border: "1px solid #D1D9E0",
+                      borderRadius: "12px",
+                      background: "#FFFFFF",
+                    }}
+                  />
+                  <Bar dataKey="leads" radius={[8, 8, 0, 0]} fill="#8BAACF" />
+                  <Line type="monotone" dataKey="deals" stroke="#2C4E6F" strokeWidth={2.5} dot={{ r: 3 }} />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>

@@ -5,10 +5,15 @@ export default function AdminLoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <AuthSplitPanel
-        imageSrc="https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&w=1800&q=80"
+        imageSrc="/auth_logo.png"
         imageAlt="Private admin authentication"
         heading="Private admin access"
         description="Use secure admin credentials and OTP verification to access protected operations."
+        showTextContent={false}
+        showHighlights={false}
+        imageFit="contain"
+        imageClassName="object-center blur-0 scale-x-100 scale-y-100 saturate-110 brightness-100 contrast-105"
+        overlayClassName="bg-[linear-gradient(135deg,rgba(244,247,251,0.14),rgba(221,231,242,0.22))]"
       />
       <main className="flex items-center justify-center px-4 py-10 md:px-8">
         <AdminLoginForm />

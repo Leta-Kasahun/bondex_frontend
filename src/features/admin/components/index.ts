@@ -1,4 +1,5 @@
 export * from "./AdminDashboardOverview";
+export * from "./AdminDashboardExecutivePanel";
 export * from "./AdminDashboardSidebar";
 export * from "./AdminDashboardTopbar";
 export * from "./AdminDashboardShell";
