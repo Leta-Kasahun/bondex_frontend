@@ -1,6 +1,13 @@
 # bondex_frontend
 Bondex Frontend is a modern Next.js CRM interface developed as part of a full-stack web application. Built with TypeScript, Tailwind CSS, Zustand, Axios, Zod validation, and shadcn/ui, it supports multilingual UX (English &amp; Amharic) and integrates seamlessly with the Bondex backend
 
+
+
+
+
+## 🎥 Demo Video
+
+[![Watch the demo](https://cdn.loom.com/sessions/thumbnails/c3d58de1c16249c1af4263fe1c9f7f73-with-play.gif)](https://www.loom.com/share/c3d58de1c16249c1af4263fe1c9f7f73)
 ```bash
 bondex_frontend/
 │
