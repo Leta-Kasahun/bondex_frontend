@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Building2, PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
@@ -8,6 +8,7 @@ import { useNotification } from "@/src/hooks";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useBusinesses, useDeleteBusiness } from "../hooks";
 import { BusinessFormModal } from "./BusinessFormModal";
+import { type Business } from "../types/business.types";
 
 export function BusinessManagementPage() {
   const notification = useNotification();
@@ -15,6 +16,7 @@ export function BusinessManagementPage() {
   const canLoadBusinesses = isUser && (isAuthenticated || Boolean(accessToken));
   const { data: businesses, isLoading, isFetching, isError } = useBusinesses(undefined, canLoadBusinesses);
   const deleteMutation = useDeleteBusiness();
+  const [editingBusiness, setEditingBusiness] = useState<Business | null>(null);
 
   const list = useMemo(() => businesses ?? [], [businesses]);
 
@@ -67,40 +69,57 @@ export function BusinessManagementPage() {
       ) : null}
 
       {canLoadBusinesses && !isLoading && !isError && list.length > 0 ? (
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <section className="space-y-3">
           {list.map((business) => (
-            <Card key={business.id} className="border-border/70 bg-[#FFFFFF]">
-              <CardHeader>
-                <CardTitle>{business.name}</CardTitle>
-                <CardDescription>{business.type ?? "Business"}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">{business.description || "No description provided."}</p>
-                <div className="flex items-center gap-2">
-                  <BusinessFormModal
-                    mode="edit"
-                    business={business}
-                    triggerLabel="Edit"
-                    triggerVariant="outline"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-9"
-                    onClick={() => onDelete(business.id)}
-                    disabled={deleteMutation.isPending}
-                  >
-                    <Trash2 className="h-4 w-4" aria-hidden />
-                    Delete
-                  </Button>
-                  <span className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground">
-                    <PencilLine className="h-3.5 w-3.5" aria-hidden />
-                    Updated {new Date(business.updatedAt).toLocaleDateString()}
-                  </span>
+            <Card key={business.id} className="w-full border-border/70 bg-[#FFFFFF]">
+              <CardContent className="py-2.5">
+                <div className="flex w-full items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <h3 className="truncate text-base font-semibold text-foreground md:text-lg">{business.name}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{business.type ?? "Business"}</p>
+                  </div>
+
+                  <div className="shrink-0 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => onDelete(business.id)}
+                        disabled={deleteMutation.isPending}
+                        aria-label={`Delete ${business.name}`}
+                      >
+                        <Trash2 className="h-5 w-5" aria-hidden />
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-sidebar-primary hover:bg-sidebar-primary/10 hover:text-sidebar-primary"
+                        onClick={() => setEditingBusiness(business)}
+                        aria-label={`Edit ${business.name}`}
+                      >
+                        <PencilLine className="h-5 w-5" aria-hidden />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+
+          <BusinessFormModal
+            mode="edit"
+            business={editingBusiness ?? undefined}
+            open={Boolean(editingBusiness)}
+            onOpenChange={(open) => {
+              if (!open) {
+                setEditingBusiness(null);
+              }
+            }}
+          />
         </section>
       ) : null}
     </main>
