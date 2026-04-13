@@ -51,7 +51,7 @@ export function AdminDashboardTopbar({
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <NotificationCenterModal backendEnabled={false} />
+          <NotificationCenterModal backendEnabled />
           <AuthenticatedAvatarMenu
             role="ADMIN"
             onLogout={() =>

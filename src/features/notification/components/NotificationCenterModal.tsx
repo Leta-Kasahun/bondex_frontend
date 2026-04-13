@@ -40,7 +40,11 @@ export function NotificationCenterModal({ backendEnabled = true }: NotificationC
   const { data: unread } = useUnreadNotificationCount(undefined, backendEnabled);
   const markAsReadMutation = useMarkNotificationAsRead();
 
-  const unreadCount = backendEnabled ? (unread?.unreadCount ?? 0) : 0;
+  const inferredUnreadCount = (notifications ?? []).filter(
+    (notification) => !(notification.read ?? Boolean(notification.readAt))
+  ).length;
+
+  const unreadCount = backendEnabled ? (unread?.unreadCount ?? inferredUnreadCount) : 0;
 
   const sortedNotifications = useMemo(
     () => (notifications ?? []).slice().sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)),
@@ -94,7 +98,7 @@ export function NotificationCenterModal({ backendEnabled = true }: NotificationC
             ) : null}
 
             {sortedNotifications.map((notification) => {
-              const isRead = Boolean(notification.readAt);
+              const isRead = notification.read ?? Boolean(notification.readAt);
               return (
                 <div
                   key={notification.id}

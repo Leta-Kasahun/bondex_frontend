@@ -5,6 +5,7 @@ export type NotificationItem = BaseEntity & {
 	type: string;
 	title: string;
 	body: string;
+	read?: boolean;
 	readAt?: string | null;
 };
 
