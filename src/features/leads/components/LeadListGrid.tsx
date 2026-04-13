@@ -4,13 +4,22 @@ import { useState } from "react";
 import { PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent } from "@/src/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
 import { type Business } from "@/src/features/business";
+import { useNotification } from "@/src/hooks";
+import { useUpdateLead } from "../hooks";
 import { type Lead } from "../types/lead.types";
 import {
   formatLeadDate,
   formatLeadPlatform,
+  leadStatusOptions,
   leadPriorityLabel,
-  leadStatusLabel,
 } from "../constants/lead-ui.constants";
 import { LeadFormModal } from "./LeadFormModal";
 
@@ -22,12 +31,37 @@ type LeadListGridProps = {
 };
 
 export function LeadListGrid({ leads, businesses, isDeleting, onDelete }: LeadListGridProps) {
+  const notification = useNotification();
+  const updateLeadMutation = useUpdateLead();
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
+  const [updatingStatusLeadId, setUpdatingStatusLeadId] = useState<string | null>(null);
 
   const priorityBrandClassName: Record<Lead["priority"], string> = {
     low: "bg-[#E9EEF3] text-[#2C4E6F]",
     medium: "bg-[#D5DEE7] text-[#2C4E6F]",
     high: "bg-[#FDECEC] text-[#B91C1C]",
+  };
+
+  const handleStatusChange = (lead: Lead, nextStatus: Lead["status"]) => {
+    if (lead.status === nextStatus) {
+      return;
+    }
+
+    setUpdatingStatusLeadId(lead.id);
+    updateLeadMutation.mutate(
+      {
+        leadId: lead.id,
+        payload: { status: nextStatus },
+      },
+      {
+        onError: () => {
+          notification.error("Unable to update lead status");
+        },
+        onSettled: () => {
+          setUpdatingStatusLeadId(null);
+        },
+      }
+    );
   };
 
   return (
@@ -59,7 +93,24 @@ export function LeadListGrid({ leads, businesses, isDeleting, onDelete }: LeadLi
                       <p className="truncate text-xs text-muted-foreground">{lead.message}</p>
                     </div>
                   </td>
-                  <td className="px-4 py-2.5 align-middle text-sm text-foreground">{leadStatusLabel[lead.status]}</td>
+                  <td className="px-4 py-2.5 align-middle">
+                    <Select
+                      value={lead.status}
+                      onValueChange={(value) => handleStatusChange(lead, value as Lead["status"])}
+                      disabled={updatingStatusLeadId === lead.id}
+                    >
+                      <SelectTrigger className="h-8 w-36 bg-[#FFFFFF] text-sm">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {leadStatusOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </td>
                   <td className="px-4 py-2.5 align-middle">
                     <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${priorityBrandClassName[lead.priority]}`}>
                       {leadPriorityLabel[lead.priority]}
