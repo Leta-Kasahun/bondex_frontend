@@ -42,7 +42,7 @@ export function DealListGrid({ deals }: DealListGridProps) {
         dealId: deal.id,
         payload: {
           stage: nextStage,
-          ...(deal.value !== null && deal.value !== undefined ? { value: deal.value } : {}),
+          ...(typeof deal.value === "number" && deal.value > 0 ? { value: deal.value } : {}),
         },
       },
       {
@@ -94,6 +94,7 @@ export function DealListGrid({ deals }: DealListGridProps) {
                         onValueChange={(value) => {
                           const next = value as DealStage;
                           setStageDraft(deal.id, next);
+                          handleUpdateStage(deal, next);
                         }}
                         disabled={updatingDealId === deal.id}
                       >
