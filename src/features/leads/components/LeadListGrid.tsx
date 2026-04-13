@@ -1,12 +1,14 @@
-import { MessageSquareText, Trash2 } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Card, CardContent } from "@/src/components/ui/card";
 import { type Business } from "@/src/features/business";
 import { type Lead } from "../types/lead.types";
 import {
   formatLeadDate,
   formatLeadPlatform,
-  leadPriorityClassName,
   leadPriorityLabel,
   leadStatusLabel,
 } from "../constants/lead-ui.constants";
@@ -20,60 +22,96 @@ type LeadListGridProps = {
 };
 
 export function LeadListGrid({ leads, businesses, isDeleting, onDelete }: LeadListGridProps) {
+  const [editingLead, setEditingLead] = useState<Lead | null>(null);
+
+  const priorityBrandClassName: Record<Lead["priority"], string> = {
+    low: "bg-[#E9EEF3] text-[#2C4E6F]",
+    medium: "bg-[#D5DEE7] text-[#2C4E6F]",
+    high: "bg-[#FDECEC] text-[#B91C1C]",
+  };
+
   return (
-    <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-      {leads.map((lead) => (
-        <Card key={lead.id} className="border-border/70 bg-[#FFFFFF]">
-          <CardHeader className="space-y-2">
-            <div className="flex items-center justify-between gap-3">
-              <CardTitle className="text-base md:text-lg">{lead.customerName || "Unnamed customer"}</CardTitle>
-              <span className={`rounded-full px-2 py-1 text-xs font-semibold ${leadPriorityClassName[lead.priority]}`}>
-                {leadPriorityLabel[lead.priority]} priority
-              </span>
-            </div>
-            <CardDescription className="inline-flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-[#E2E8F0] px-2 py-1 text-xs font-medium text-[#334155]">
-                {leadStatusLabel[lead.status]}
-              </span>
-              <span className="text-xs text-muted-foreground">Platform: {formatLeadPlatform(lead.platform)}</span>
-            </CardDescription>
-          </CardHeader>
+    <Card className="border-border/70 bg-[#FFFFFF]">
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left" style={{ minWidth: 920 }}>
+            <thead className="bg-[#F3F6FA] text-xs uppercase tracking-wide text-[#4F647A]">
+              <tr>
+                <th className="px-4 py-3 font-semibold">Customer</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-4 py-3 font-semibold">Priority</th>
+                <th className="px-4 py-3 font-semibold">Platform</th>
+                <th className="px-4 py-3 font-semibold">Email</th>
+                <th className="px-4 py-3 font-semibold">Phone</th>
+                <th className="px-4 py-3 font-semibold">Created</th>
+                <th className="px-4 py-3 text-right font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map((lead) => (
+                <tr
+                  key={lead.id}
+                  className="border-t border-border transition-colors hover:bg-sidebar-primary/5"
+                >
+                  <td className="px-4 py-2.5 align-middle">
+                    <div className="max-w-64">
+                      <p className="truncate text-sm font-semibold text-foreground">{lead.customerName || "Unnamed customer"}</p>
+                      <p className="truncate text-xs text-muted-foreground">{lead.message}</p>
+                    </div>
+                  </td>
+                  <td className="px-4 py-2.5 align-middle text-sm text-foreground">{leadStatusLabel[lead.status]}</td>
+                  <td className="px-4 py-2.5 align-middle">
+                    <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${priorityBrandClassName[lead.priority]}`}>
+                      {leadPriorityLabel[lead.priority]}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2.5 align-middle text-sm text-foreground">{formatLeadPlatform(lead.platform)}</td>
+                  <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">{lead.customerEmail || "-"}</td>
+                  <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">{lead.customerPhone || "-"}</td>
+                  <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">{formatLeadDate(lead.createdAt)}</td>
+                  <td className="px-4 py-2.5 align-middle">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-sidebar-primary hover:bg-sidebar-primary/10 hover:text-sidebar-primary"
+                        onClick={() => setEditingLead(lead)}
+                        aria-label={`Edit ${lead.customerName || "lead"}`}
+                      >
+                        <PencilLine className="h-5 w-5" aria-hidden />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => onDelete(lead.id)}
+                        disabled={isDeleting}
+                        aria-label={`Delete ${lead.customerName || "lead"}`}
+                      >
+                        <Trash2 className="h-5 w-5" aria-hidden />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          <CardContent className="space-y-3">
-            <p className="line-clamp-2 text-sm text-muted-foreground">{lead.message}</p>
-
-            <div className="grid grid-cols-1 gap-1 text-xs text-muted-foreground md:grid-cols-2">
-              <span>Email: {lead.customerEmail || "-"}</span>
-              <span>Phone: {lead.customerPhone || "-"}</span>
-              <span>Created: {formatLeadDate(lead.createdAt)}</span>
-              <span>Updated: {formatLeadDate(lead.updatedAt)}</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <LeadFormModal
-                mode="edit"
-                lead={lead}
-                businesses={businesses}
-                triggerLabel="Edit"
-                triggerVariant="outline"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onDelete(lead.id)}
-                disabled={isDeleting}
-              >
-                <Trash2 className="h-4 w-4" aria-hidden />
-                Delete
-              </Button>
-              <span className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <MessageSquareText className="h-3.5 w-3.5" aria-hidden />
-                {lead.aiReasoning ? "AI scored" : "Manual triage"}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </section>
+        <LeadFormModal
+          mode="edit"
+          lead={editingLead ?? undefined}
+          businesses={businesses}
+          open={Boolean(editingLead)}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingLead(null);
+            }
+          }}
+        />
+      </CardContent>
+    </Card>
   );
 }
