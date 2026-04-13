@@ -1,5 +1,5 @@
 import { API_ROUTES } from "@/src/config/api";
-import { requestGet, requestPost, requestPut } from "@/src/features/shared/services";
+import { requestDelete, requestGet, requestPost, requestPut } from "@/src/features/shared/services";
 import {
 	type ConvertLeadToDealInput,
 	type Deal,
@@ -15,3 +15,6 @@ export const listDeals = (params?: DealListQuery) =>
 
 export const updateDealStage = (dealId: string, payload: UpdateDealStageInput) =>
 	requestPut<Deal, UpdateDealStageInput>(`${API_ROUTES.DEALS.BASE}/${dealId}/stage`, payload);
+
+export const deleteDeal = (dealId: string) =>
+	requestDelete<{ message: string }>(`${API_ROUTES.DEALS.BASE}/${dealId}`);

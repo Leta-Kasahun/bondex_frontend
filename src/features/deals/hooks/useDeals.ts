@@ -1,4 +1,4 @@
-import { convertLeadToDeal, listDeals, updateDealStage } from "../services";
+import { convertLeadToDeal, deleteDeal, listDeals, updateDealStage } from "../services";
 import {
 	type ConvertLeadToDealInput,
 	type DealListQuery,
@@ -30,3 +30,8 @@ export const useUpdateDealStage = () =>
 			updateDealStage(input.dealId, input.payload),
 		{ invalidateKeys: [DEAL_LIST_KEY] }
 	);
+
+export const useDeleteDeal = () =>
+	useFeatureMutation((dealId: string) => deleteDeal(dealId), {
+		invalidateKeys: [DEAL_LIST_KEY],
+	});

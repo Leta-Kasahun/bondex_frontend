@@ -1,1 +1,1 @@
-export { useConvertLeadToDeal, useDeals, useUpdateDealStage } from "./useDeals";
+export { useConvertLeadToDeal, useDeals, useDeleteDeal, useUpdateDealStage } from "./useDeals";

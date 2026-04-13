@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarClock, Save } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Card, CardContent } from "@/src/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -12,8 +12,8 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { useNotification } from "@/src/hooks";
-import { useUpdateDealStage } from "../hooks";
-import { dealStageClassName, dealStageLabel, dealStageOptions, formatDealDate } from "../constants/deal-ui.constants";
+import { useDeleteDeal, useUpdateDealStage } from "../hooks";
+import { dealStageOptions, formatDealDate } from "../constants/deal-ui.constants";
 import { type Deal, type DealStage } from "../types/deal.types";
 
 type DealListGridProps = {
@@ -23,18 +23,20 @@ type DealListGridProps = {
 export function DealListGrid({ deals }: DealListGridProps) {
   const notification = useNotification();
   const updateDealStageMutation = useUpdateDealStage();
+  const deleteDealMutation = useDeleteDeal();
   const [stageDrafts, setStageDrafts] = useState<Record<string, DealStage>>({});
+  const [updatingDealId, setUpdatingDealId] = useState<string | null>(null);
 
   const setStageDraft = (dealId: string, stage: DealStage) => {
     setStageDrafts((prev) => ({ ...prev, [dealId]: stage }));
   };
 
-  const handleUpdateStage = (deal: Deal) => {
-    const nextStage = stageDrafts[deal.id] ?? deal.stage;
+  const handleUpdateStage = (deal: Deal, nextStage: DealStage) => {
     if (nextStage === deal.stage) {
       return;
     }
 
+    setUpdatingDealId(deal.id);
     updateDealStageMutation.mutate(
       {
         dealId: deal.id,
@@ -45,73 +47,109 @@ export function DealListGrid({ deals }: DealListGridProps) {
       },
       {
         onSuccess: () => notification.success("Deal stage updated"),
+        onError: () => notification.error("Unable to update deal stage"),
+        onSettled: () => setUpdatingDealId(null),
       }
     );
   };
 
+  const handleDeleteDeal = (dealId: string) => {
+    deleteDealMutation.mutate(dealId, {
+      onSuccess: () => notification.success("Deal deleted"),
+      onError: () => notification.error("Unable to delete deal"),
+    });
+  };
+
   return (
-    <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-      {deals.map((deal) => {
-        const selectedStage = stageDrafts[deal.id] ?? deal.stage;
+    <Card className="border-border/70 bg-[#FFFFFF]">
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left" style={{ minWidth: 980 }}>
+            <thead className="bg-[#F3F6FA] text-xs uppercase tracking-wide text-[#4F647A]">
+              <tr>
+                <th className="px-4 py-3 font-semibold">Deal</th>
+                <th className="px-4 py-3 font-semibold">Stage</th>
+                <th className="px-4 py-3 font-semibold">Value</th>
+                <th className="px-4 py-3 font-semibold">Closed</th>
+                <th className="px-4 py-3 font-semibold">Created</th>
+                <th className="px-4 py-3 font-semibold">Lead ID</th>
+                <th className="px-4 py-3 text-right font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deals.map((deal) => {
+                const selectedStage = stageDrafts[deal.id] ?? deal.stage;
 
-        return (
-          <Card key={deal.id} className="border-border/70 bg-[#FFFFFF]">
-            <CardHeader className="space-y-2">
-              <div className="flex items-center justify-between gap-3">
-                <CardTitle className="text-base md:text-lg">{deal.name}</CardTitle>
-                <span className={`rounded-full px-2 py-1 text-xs font-semibold ${dealStageClassName[deal.stage]}`}>
-                  {dealStageLabel[deal.stage]}
-                </span>
-              </div>
-              <CardDescription className="text-xs text-muted-foreground">
-                Deal ID: {deal.id}
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-3">
-              <div className="grid grid-cols-1 gap-1 text-xs text-muted-foreground md:grid-cols-2">
-                <span>Value: {deal.value ? `$${deal.value.toLocaleString()}` : "-"}</span>
-                <span>Created: {formatDealDate(deal.createdAt)}</span>
-                <span>Updated: {formatDealDate(deal.updatedAt)}</span>
-                <span>Closed: {deal.closedAt ? formatDealDate(deal.closedAt) : "-"}</span>
-              </div>
-
-              <div className="flex flex-col gap-2 md:flex-row md:items-center">
-                <Select
-                  value={selectedStage}
-                  onValueChange={(value) => setStageDraft(deal.id, value as DealStage)}
-                >
-                  <SelectTrigger className="h-10 w-full bg-[#FFFFFF] px-4 text-sm md:max-w-55">
-                    <SelectValue placeholder="Select stage" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {dealStageOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleUpdateStage(deal)}
-                  disabled={updateDealStageMutation.isPending || selectedStage === deal.stage}
-                >
-                  <Save className="h-4 w-4" aria-hidden />
-                  Update stage
-                </Button>
-
-                <span className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground">
-                  <CalendarClock className="h-3.5 w-3.5" aria-hidden />
-                  Workflow synced
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
-    </section>
+                return (
+                  <tr key={deal.id} className="border-t border-border transition-colors hover:bg-sidebar-primary/5">
+                    <td className="px-4 py-2.5 align-middle">
+                      <div className="max-w-64">
+                        <p className="truncate text-sm font-semibold text-foreground">{deal.name}</p>
+                        <p className="truncate text-xs text-muted-foreground">{deal.id}</p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5 align-middle">
+                      <Select
+                        value={selectedStage}
+                        onValueChange={(value) => {
+                          const next = value as DealStage;
+                          setStageDraft(deal.id, next);
+                        }}
+                        disabled={updatingDealId === deal.id}
+                      >
+                        <SelectTrigger className="h-8 w-36 bg-[#FFFFFF] text-sm">
+                          <SelectValue placeholder="Stage" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {dealStageOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </td>
+                    <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">
+                      {deal.value ? `$${deal.value.toLocaleString()}` : "-"}
+                    </td>
+                    <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">
+                      {deal.closedAt ? formatDealDate(deal.closedAt) : "-"}
+                    </td>
+                    <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">{formatDealDate(deal.createdAt)}</td>
+                    <td className="px-4 py-2.5 align-middle text-sm text-muted-foreground">{deal.leadId}</td>
+                    <td className="px-4 py-2.5 align-middle">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="text-sidebar-primary hover:bg-sidebar-primary/10 hover:text-sidebar-primary"
+                          onClick={() => handleUpdateStage(deal, selectedStage)}
+                          disabled={updatingDealId === deal.id || selectedStage === deal.stage}
+                          aria-label={`Update ${deal.name}`}
+                        >
+                          <Save className="h-5 w-5" aria-hidden />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => handleDeleteDeal(deal.id)}
+                          disabled={deleteDealMutation.isPending}
+                          aria-label={`Delete ${deal.name}`}
+                        >
+                          <Trash2 className="h-5 w-5" aria-hidden />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
