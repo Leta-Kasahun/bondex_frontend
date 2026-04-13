@@ -21,14 +21,16 @@ type AiWidgetResponse = {
   data?: {
     output?: string;
   };
+  output?: string;
 };
 
 type AiAssistantWidgetProps = {
   requestMessage: (message: string) => Promise<AiWidgetResponse>;
   welcomeText: string;
+  sampleQuestions?: string[];
 };
 
-export function AiAssistantWidget({ requestMessage, welcomeText }: AiAssistantWidgetProps) {
+export function AiAssistantWidget({ requestMessage, welcomeText, sampleQuestions = [] }: AiAssistantWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [input, setInput] = useState("");
@@ -68,14 +70,15 @@ export function AiAssistantWidget({ requestMessage, welcomeText }: AiAssistantWi
     try {
       const data = await requestMessage(trimmed);
 
-      if (!data?.success) {
-        const serverMessage = data?.message?.trim();
+      // Some API helpers unwrap `{ data }`, while others return full envelopes.
+      if (data?.success === false) {
+        const serverMessage = data.message?.trim();
         addMessage("bot", serverMessage || "AI service is temporarily unavailable.");
         return;
       }
 
-      const output = data?.data?.output?.trim() || "I could not generate a response right now.";
-      addMessage("bot", output);
+      const output = (data.data?.output ?? data.output ?? "").trim();
+      addMessage("bot", output || "I could not generate a response right now.");
     } catch {
       addMessage("bot", "Connection issue. Please try again in a moment.");
     } finally {
@@ -153,6 +156,31 @@ export function AiAssistantWidget({ requestMessage, welcomeText }: AiAssistantWi
                 </div>
               ) : null}
             </div>
+
+            {sampleQuestions.length > 0 ? (
+              <div className="rounded-lg border border-border/70 bg-background/70 p-2">
+                <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  Suggested Questions
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {sampleQuestions.slice(0, 8).map((question) => (
+                    <Button
+                      key={question}
+                      type="button"
+                      variant="outline"
+                      size="xs"
+                      className="h-7 rounded-full border-sidebar-primary/30 bg-white/80 px-2.5 text-[11px] text-sidebar-primary hover:bg-sidebar-primary/10"
+                      onClick={() => {
+                        void sendPrompt(question);
+                      }}
+                      disabled={isSending}
+                    >
+                      {question}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             <form
               className="flex items-center gap-2"
